@@ -1,0 +1,11 @@
+# exclude all files called main that dont have a .tex or pdf extension
+main.aux
+main.blg
+main.fdb_latexmk
+main.fls
+main.log
+main.out
+main.run.xml
+main.toc
+main.lof
+main.lot
