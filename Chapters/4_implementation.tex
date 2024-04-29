@@ -95,6 +95,7 @@ aprslib es una biblioteca de Python que facilita la interacción con el sistema 
 \end{itemize}
 Se ha elegido la libreria aprs por su facilidad de uso, su documentación y su capacidad para decodificar los paquetes APRS.
 \subsection{AWS}
+TODO
 Amazon Web Services (AWS) es una plataforma de servicios en la nube ofrecida por Amazon. Proporciona servicios de infraestructura informática, almacenamiento, bases de datos, análisis e inteligencia artificial, entre otros.
 
 \begin{itemize}
@@ -158,9 +159,30 @@ Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
 
 Se ha seleccionado APRS-IS como fuente de datos para la aplicación debido a su facilidad de uso, su disponibilidad y la gran cantidad de información que ofrece.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.85\textwidth]{./Chapter_4/cloud_arch.png}
-	\caption{Estructura base de la aplicación.}
-	\label{fig:cloud-architecture}
-\end{figure}
+\subsection{Recepción de paquetes APRS}
+Para la recepción de paquetes APRS se ha utilizado la libreria aprslib de Python. Esta libreria permite conectarse a un servidor APRS-IS y recibir los paquetes APRS en tiempo real. Se ha creado un sistema que utilizando esta libreria se conecta a un servidor APRS-IS, recibe los paquetes APRS y los guarda en un buffer en memoria. Cuando el buffer se llena con aproximadamente 10.000 mensajes en aproximadamente 15 segundos, se procede a escribir el buffer en un ficher comprimido en el disco duro SSD.
+Una cosa curiosa es que los mensajes APRS no se decodifican en este punto, de hecho se guardan sin ningún tipo de procesamiento en ficheros binarios comprimidos en formato gzip para no ocupar mucho espacio en disco. Esto se hace así para evitar la sobrecarga de procesamiento en la raspberry pi y para poder procesar los mensajes en un servidor más potente en la nube.
+Es importante mencionar que el sistema de recepción de paquetes APRS se ejecuta en segundo plano en modo demonio utilizando el gestor de procesos Supervisord, lo que garantiza que el sistema se mantenga en funcionamiento incluso en caso de fallos o reinicios del sistema.
+
+\subsection{Procesado de paquetes APRS}
+\subsubsection{Subida de ficheros a AWS S3}
+Una vez los ficheros se han guardado en el disco duro SSD, se procede a subirlos a un bucket S3 en AWS. Para ello se ha utilizado la libreria boto3 de Python, que permite interactuar con los servicios de AWS desde Python. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que sube los ficheros comprimidos al bucket S3. Una vez subidos los ficheros, se eliminan del disco duro SSD para liberar espacio. Cuando un fichero se se sube a S3 se desencadena un evento 
+\subsubsection{Procesado de paquetes APRS en AWS lambda}
+Una vez los ficheros se han subido a S3, se desencadena un evento que ejecuta una función lambda en AWS. Esta función lambda se encarga de descomprimir el fichero, procesar los mensajes APRS y convertirlos en formato Json. 
+
+Por defecto lambda no puede hacer uso de librerias de terceros por lo que se ha tenido que encapsular la libreria aprslib en un fichero zip, subirlo a lambda y establecerlo como una capa de lambda para poder hacer uso de ella.
+Para la descompresión de los ficheros se ha utilizado la libreria gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip. 
+Para el procesado de los mensajes APRS se ha utilizado la libreria aprslib de Python como ya hemos mencionado, que permite decodificar los mensajes APRS y extraer información útil como la posición, velocidad y rumbo de los objetos rastreados en formato clave-valor.
+Esta función lambda se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
+Finalmente los mensajes procesados se guardan en un bucket S3 de salida (aprsoutput) en formato Json para su posterior descarga. La descarga de los ficheros Json ocurre una vez al día mediante la orquestación de Apache Airflow y la libreria boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la raspberry pi.
+
+
+\subsection{Almacenamiento de paquetes APRS en la base de datos}
+Una vez los ficheros Json se han descargado al directorio temporal en la raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la libreria SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros Json, procesa los mensajes APRS y los almacena en la base de datos PostgreSQL.
+Este paso esconde un gran problema que hubo de ser solucionado. El script, cuando fue creado, leía los ficheros Json, creaba un objeto de Python para su inserci. 
+% \begin{figure}[h]
+% 	\centering
+% 	\includegraphics[width=0.85\textwidth]{./Chapter_4/cloud_arch.png}
+% 	\caption{Estructura base de la aplicación.}
+% 	\label{fig:cloud-architecture}
+% \end{figure}
