@@ -150,7 +150,7 @@ Componentes principales:
 	\item \textbf{Clientes APRS-IS:} Pueden ser otros servidores, aplicaciones web o aplicaciones móviles que acceden a los servidores APRS-IS para obtener los paquetes APRS y mostrarlos a los usuarios. 
 \end{itemize}
 Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
-\begin{figure}[h]
+\begin{figure}[!h]
 	\centering 
 	\includegraphics[width=0.85\textwidth]{./Chapter_4/aprs_infra.png}
 	\caption{Infrasestructura de la red APRS - APRS-IS.}
@@ -178,11 +178,161 @@ Finalmente los mensajes procesados se guardan en un bucket S3 de salida (aprsout
 
 
 \subsection{Almacenamiento de paquetes APRS en la base de datos}
-Una vez los ficheros Json se han descargado al directorio temporal en la raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la libreria SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros Json, procesa los mensajes APRS y los almacena en la base de datos PostgreSQL.
-Este paso esconde un gran problema que hubo de ser solucionado. El script, cuando fue creado, leía los ficheros Json, creaba un objeto de Python para su inserci. 
-% \begin{figure}[h]
-% 	\centering
-% 	\includegraphics[width=0.85\textwidth]{./Chapter_4/cloud_arch.png}
-% 	\caption{Estructura base de la aplicación.}
-% 	\label{fig:cloud-architecture}
-% \end{figure}
+Una vez los ficheros Json ya procesados se han descargado al directorio temporal en la raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la libreria SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros Json, procesa los mensajes APRS y los almacena en la base de datos.
+Este paso esconde un gran problema que hubo de ser solucionado. El script en un principio seguia los siguientes pasos.
+
+\begin{enumerate}
+	\item \textbf{Lectura de ficheros Json:} El script lee los ficheros Json de la carpeta local /tmp descargados del bucket S3.
+	\item \textbf{Extracción de la estacion:} El script extrae la estación origen y destino de cada mensaje y en caso de no existir en la BD las crea.
+	\item \textbf{Extracción de las posiciones:} Se extraen las posiciones (si las hay) de cada mensaje y el timestamp si lo hay y se almacenan en la BD.
+	\item \textbf{Identificación del país:} Mediante la libreria geopy y ficheros de formas de paises se identifica el país de la estación.
+	\item \textbf{Extracción de los mensajes:} Se extraen los mensajes de cada linea del JSON y se almacenan en la BD.
+\end{enumerate}
+
+Este enfoque resultó tener varios problemas. El primero y más importante era el de rendimiento ya que cada archivo JSON contenia alrededor de 10000 mensajes y en la creación de los objetos, inserciones en la BD y detección del país se tardaba alrededor de 40 segundos por fichero JSON. Esto aunque no parezca demasiado tiempo, si se tiene en cuenta que la cantidad de mensajes APRS que se reciben en 40 segundos es alrededor de 45000 mensajes, se puede ver que el sistema no era escalable.
+
+\subsubsection{\underline{Optimizaciones}}
+Para solucionar este problema se realizaron las siguientes optimizaciones:
+\begin{itemize}
+	\item \textbf{Uso de sets:} Se ha cambiado el uso de consultas a la bd por sets en la creación de las estaciones para acelerar la comprobación de si una estación ya existe en la base de datos.
+	\item \textbf{Batch Insert:} Se ha modificado la interfaz con Sqlalchemy para permitir inserciones en lotes de 250 mensajes.
+	\item \textbf{Detección de paises con geopandas:} Se ha cambiado la libreria geopy por geopandas que permite la detección de paises de manera mucho más rápida utilizando paralelización.
+\end{itemize}
+Estas optimizaciones han permitido que el tiempo de procesado de un fichero JSON haya pasado de 40 segundos a unos 2 segundos, lo que ha permitido que el sistema sea escalable y pueda procesar grandes volúmenes de mensajes APRS de manera eficiente.
+
+\subsection{Base de datos}
+Como se ha mencionado previamente, se ha elegido PostgreSQL como sistema de gestión de bases de datos para la aplicación. Esta elección se ha basado en la robustez, la fiabilidad y la capacidad de manejar grandes volúmenes de datos que ofrece PostgreSQL incluso en sistemas con recursos reducidos. La base de datos se ha diseñado siguiendo un modelo relacional \Cref{fig:db-model} que permite almacenar y relacionar la información de los mensajes APRS de manera eficiente, el modelo cuenta con las siguientes tablas.
+
+\begin{itemize}
+	\item \textbf{stations:} Almacena la información de las estaciones APRS, incluyendo el identificador (CALLSIGN), el ssid y su símbolo.
+	\item \textbf{station\textunderscore locations:} Almacena la información de las posiciones \footnote[1]{Esta tabla tiene un campo id en la clave primaria por si una estación ha emitido un mensaje sin timestamp} de las estaciones APRS, incluyendo el país, la latitud, la longitud y la fecha y hora en la que se han recibido.
+	\item \textbf{messages:} Almacena la información de los mensajes APRS, incluyendo el contenido del mensaje, el tipo de mensaje y el timestamp.
+	\item \textbf{qrz\textunderscore profiles:} Sirve como una cache que almacena la información de los perfiles de los usuarios de QRZ, incluyendo el identificador (CALLSIGN), el nombre, la dirección, la ciudad, el estado, el código postal, el país, la latitud, la longitud y la fecha de nacimiento entre muchos otros.
+\end{itemize}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.85\textwidth]{./Chapter_4/db_diagram.png}
+	\caption{Estructura de la base de datos.}
+	\label{fig:db-model}
+\end{figure}
+
+\section{Visualización y Presentación de datos}
+
+En esta sección se describirá con detalle el módulo de visualización y presentación de datos de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
+
+\subsection{Dash}
+Dash es un framework de Python creado por Plotly para la creación de aplicaciones web interactivas y visualizaciones de datos. Dash permite crear aplicaciones web interactivas y visualizaciones de datos atractivas utilizando Python como lenguaje de programación. Dash está escrito encima de Plotly.js, React y Flask lo que permite una gran capacidad de customizacion.
+Dash ofrece una versión de pago llamada Dash Enterprise que ofrece una gran cantidad de funcionalidades para elaborar aplicaciones web de manera más rápida y sencilla. Sin embargo, para este proyecto se ha utilizado la versión gratuita de Dash, con algunas librerías adicionales entre las que se encuentran:
+\begin{itemize}
+	\item \textbf{Dash Core Components:} Ofrece una amplia gama de componentes interactivos como gráficos, tablas, sliders, dropdowns, entre otros, que permiten a los usuarios interactuar con los datos de manera intuitiva.
+	\item \textbf{Dash HTML Components:} Ofrece una amplia gama de componentes HTML como divs, spans, inputs, entre otros, que permiten personalizar la apariencia y el diseño de la aplicación web.
+	\item \textbf{Dash Mantine Components:} Ofrece una amplia gama de componentes de Mantine como navbars, tarjetas, modales, entre otros, que permiten crear aplicaciones web atractivas y responsivas.
+	\item \textbf{Dash Express:} Ofrece componentes extra como un panel de filtrado y una barra de navegación. \footnote{Esta libreria se ha modificado para adaptarla a las necesidades del proyecto.}
+	\item \textbf{Plotly Express:} Es el principal competidor de matplotlib en el mundo de la visualización de datos en Python. Ofrece una gran cantidad de gráficos y visualizaciones de datos interactivos.
+\end{itemize}
+
+\subsection{Diseño}
+El diseño de la aplicación web se ha basado en la simplicidad, la usabilidad y la accesibilidad. El primer diseño del proyecto se realizó en la aplicación de prototipado Figma como se muestra en la \Cref{fig:figma}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\textwidth]{./Chapter_4/first_draft.png}
+	\caption{Primer diseño de la aplicación web en Figma.}
+	\label{fig:figma}
+\end{figure}
+
+Este diseño se ha ido modificando y adaptando a lo largo del desarrollo del proyecto para mejorar la usabilidad y la experiencia del usuario. Este diseño muestra la pantalla principal de la aplicación, que incluye un mapa con las estaciones APRS, y un panel de control con filtros y opciones de visualización.
+
+\subsection{Home - Primera pantalla}
+En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización.
+\subsubsection{Obtención de datos}
+\subsubsection{Mapa de estaciones APRS}
+El mapa de estaciones APRS muestra la posición de cada una de las estaciones APRS, representadas por un marcador en el mapa. Es una mapa interactivo que permite hacer zoom, desplazarse y al posicionar el cursor encima de una estación aparecerá un recuadro ofreciendo información adicional.
+
+Esta página hace uso de la libreria plotly para renderizar el mapa y del servicio web de mapas Mapbox para obtener los mapas y estilos de mapa.
+
+\subsubsection{Filtros}
+El panel de control de la aplicación web incluye una serie de filtros y opciones de visualización que permiten al usuario personalizar la información mostrada en el mapa. La ventaja de estos filtros es que son aditivos y se pueden combinar para obtener con exactitud la información requerida. Los filtros disponibles son:
+\begin{itemize}
+	\item \textbf{Filtro por Rango de Fechas:} Permite filtrar las estaciones APRS por rango de fechas, mostrando solo las estaciones de las que se ha recibido algún mensaje en el rango de fechas seleccionado.
+	\item \textbf{Filtro por País:} Permite filtrar las estaciones APRS por país, mostrando solo las estaciones que se encuentran en el país seleccionado.
+	\item \textbf{Filtro por contenido del mensaje:} Este es quizás el filtro más interesante ya que permite filtrar las estaciones por el contenido del mensaje, este filtro será explicado más adelante. 
+	\item \textbf{Filtro por Tipo de Estación:} Permite filtrar las estaciones APRS por tipo, mostrando solo las estaciones que corresponden al tipo seleccionado.
+	\item \textbf{Filtro por ssid:} Permite filtrar las estaciones por ssid.
+\end{itemize}
+
+\subsubsection{Búsqueda difusa en contenido de mensajes}
+Este filtro es personalmente el más interesante de todos los filtros disponibles. El objetivo es permitir al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase especifica. Para ello se han probado varias alternativas como el uso de expresiones regulares o una implementación en python puro. El problema de estas opciones es que son muy lentas para el enorme volumen de datos con el que se cuenta y al ser dinámico no era factible realizar esa búsqueda en tiempo real. 
+Finalmente se ha optado por el uso de Postgres FTS (Full Text Search). Postgres FTS es un sistema de búsqueda de texto completo que permite realizar búsquedas de texto en grandes volúmenes de datos de manera eficiente. Las ventajas que ofrece este sistema son:
+
+\begin{itemize}
+	\item \textbf{Rendimiento:} Todo el proceso de búsqueda se realiza en la base de datos, lo que permite realizar búsquedas de texto sin transferir todos los mensajes al servidor para su búsqueda.
+	\item \textbf{Búsqueda difusa:} Permite realizar búsquedas de texto difuso, lo que significa que se pueden buscar palabras o frases que contengan errores tipográficos o que no coincidan exactamente con el texto buscado.
+	\item \textbf{Indexación:} Postgres FTS indexa automáticamente los mensajes de texto, lo que permite realizar búsquedas de texto de manera eficiente incluso en grandes volúmenes de datos. 
+\end{itemize}
+Se ha creado un índice de texto completo en la columna de mensajes de la tabla de mensajes y se ha utilizado la función to\textunderscore tsvector para convertir los mensajes en un vector de texto completo. Posteriormente se ha utilizado la función plainto\textunderscore tsquery para convertir la palabra o frase de búsqueda en una consulta de texto completo y finalmente se ha utilizado la función ts\textunderscore query para realizar la búsqueda de texto completo en la columna de mensajes. Este filtro permite al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, lo que facilita la identificación y el análisis de los mensajes relevantes. 
+Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal con la lista de todos los mensajes que contienen la palabra o frase de búsqueda, ordenados por relevancia haciendo uso de la función ts\textunderscore rank. Otra funcionalidad interesante es que la palabra o palabras buscadas se resaltan en el mensaje para facilitar su identificación como se muestra en la \Cref{fig:postgres-fts}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{./Chapter_4/fts_output.png}
+	\caption{Reultados de la búsqueda de <<emergency hospital>>.}
+	\label{fig:postgres-fts}
+\end{figure}
+
+En el modal se muestra una tabla de dos columnas, la columna izquierda contiene un boton con el nombre de la estación y la columna derecha el contenido del mensaje.
+
+\subsection{Station - Segunda pantalla}
+Esta es la página que hace única a APRSINT. En esta página se muestra la información detallada de una estación APRS en concreto. Se puede llegar a esta pantalla desde la página principal haciendo clic en un marcador de una estación en el mapa, haciendo click en una estación en la búsqueda en los mensajes o haciendo click en un nodo del grafo de la página 3. La pantalla station esta dividida en tres secciones.
+
+\subsubsection{Perfil de QRZ}
+QRZ es una base de datos de radioaficionados que contiene información detallada sobre los radioaficionados de todo el mundo. Para acceder a la información disponible en la web qrz es necesario tener una cuenta y estar registrado. QRZ cuenta con un servicio de API que permite acceder a la información de los radioaficionados de manera programática. Para mantener APRSINT fiel a los principios del OSINT (fuentes abiertas) se ha optado por no utilizar la API e intentar otra opción.
+
+Utilizando una cuenta normal gratuita en QRZ, se permiten realizar hasta 25 visualizaciones de perfiles diarias en su sitio web. Con el objetivo de aumentar la cantidad de visualizaciones disponibles, se ha optado por implementar web scraping mediante un sistema propio de rotación de cuentas gratuitas y utilizando la libreria \textit{BeautifulSoup}. Como parte de esta estrategia, se ha creado una tabla en la base de datos para almacenar en caché las solicitudes, lo que reduce el número de solicitudes a una misma estación si esta ya ha sido consultada previamente.
+
+Este módulo es de los más complejos de la aplicación pero a su vez de los más útiles ya que permite al usuario obtener información muy detallada de una estación APRS en concreto y de la persona que está detras. Algunos de los datos que se pueden obtener son: 
+
+\begin{itemize}
+	\item Nombre de la persona registrada
+	\item Fechas de registro y última actualización en la web
+	\item Alias conocidos de la estación
+	\item Dirección de la persona registrada (Como link a google maps)
+	\item Fecha de nacimiento de la persona registrada
+\end{itemize}
+
+
+
+\subsection{Graph - Tercera pantalla}
+Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en el que los nodos son las estaciones y las aristas dirigidas, mensajes como se muestra en la \Cref{fig:graph}. El grafo es interactivo y permite hacer zoom, desplazarse y al posicionar el cursor encima de un nodo o arista aparecerá un recuadro ofreciendo información adicional. El color y tamaño de los nodos depende de la cantidad de mensajes que ha emitido o recibido la estación y de misma manera el color y tamaño de las aristas depende de la cantidad de mensajes que se han emitido o recibido desde la estación origen y destino.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{./Chapter_4/graph.png}
+	\caption{Grafo de estaciones APRS.}
+	\label{fig:graph}
+\end{figure}
+
+Las características que se buscaban en la solución final eran:
+
+\begin{itemize}
+	\item \textbf{Interactividad:} Se buscaba un grafo interactivo que permitiera al usuario explorar las relaciones entre las estaciones APRS.
+	\item \textbf{Rendimiento:} Quizás la característica más importante, el grafo debia ser capaz de mostrar una gran cantidad de estaciones y conexiones sin afectar al rendimiento de la aplicación.
+	\item \textbf{Personalización:} Se buscaba un grafo que permitiera personalizar la apariencia y el comportamiento de los nodos y aristas según las características de cada estación y mensaje.
+\end{itemize}
+Para alcanzar la solución final que se presenta ahora en la página, se han probado muchas opciones que se han ido descartando por diferentes motivos. 
+\subsubsection{Alternativas probadas}
+En un primer momento se intentó utilizar la libreria \textbf{networkx} de Python para la creación del grafo, sin embargo, se descartó debido a su rendimiento y a su falta de interactividad. Posteriormente se intentó utilizar la libreria \textbf{Cytoscape} que es la solución estandard que ofrece Dash, esta ofrece una gran cantidad de funcionalidades para la creación de grafos interactivos, sin embargo, se descartó de nuevo debido a su pobre rendimiento. 
+
+Una de las alternativas que también se probó fue la libreria \textbf{Sigma JS} que ofrece una gran cantidad de funcionalidades y personalización para la creación de grafos interactivos. Esta libreria cuenta con una funcionalidad interesante \textit{forceAtlas2} que permite calcular mediante una simulación de fuerzas la posición de los nodos y aristas en el grafo. Sin embargo, de nuevo se descartó debido a su rendimiento con una gran cantidad de nodos y aristas.
+
+Finalmente se optó por la libreria \textbf{Cosmograph JS}. Cosmograph utiliza la libreria \textit{cosmos} de calculo de posiciones mediante la gpu y por tanto puede manejar un gran numero de nodos y aristas. 
+
+\subsubsection{El grafo}
+El problema principal con Cosmograph ha sido la falta de documentación debido a que es bastante nueva y la dificultad de integrarla con Dash. Esta libreria esta publicada en npm y se ha tenido que utilizar bundle.js para convertir el código de JavaScript en un solo fichero que se pueda importar en Dash. Ha sido necesario modificar ligeramente la libreria para terminar de integrarla con Dash.
+
+Se han utilizado tres componentes de Cosmograph JS para la creación del grafo, el componente \textit{Cosmograph} que crea el grafo, el componente \textit{CosmographSearch} que permite mediante una barra de búsqueda encontrar una estación y el componente \textit{CosmographTimeline} que permite filtrar el grafo por rango de fechas.
+
+Para mejorar el rendimiento general de la web se ha utilizado la técnica de lazy loading, que consiste en cargar los componentes del grafo solo cuando el usuario presiona el boton \textit{Load graph}. En el momento que el usuario presiona el boton, se activa un callback de cliente de Dash. El callback primero lee los datos del grafo de un fichero CSV que se actualiza diariamente mediante Apache Airflow. Posteriormente se crean los nodos y las aristas y se inicializa el grafo, la barra de búsqueda y la barra de tiempo. Seguidamente se establecen los paramentros de la simulación de fuerzas y se inicia la simulación. Por último se establecen las propiedades visuales y funcionales de los nodos y aristas.
+
+Cuando el usuario arrastra el cursor sobre un nodo, se muestra un recuadro con el nombre de la estación. Cuando el usuario hace clic en un nodo, se le redirige a la página \textbf{station} de la estación seleccionada.
