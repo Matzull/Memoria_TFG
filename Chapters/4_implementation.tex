@@ -117,6 +117,7 @@ Supervisor es un sistema de control de procesos para sistemas operativos tipo Un
 \end{itemize}
 
 Se ha seleccionado Supervidord como gestor de procesos gracias a su facilidad, flexibilidad (permitiendo ejecutar scripts de python directamente) y robustez.
+
 \subsection{Pandas}
 Pandas es la libreria de facto de python para el manejo y análisis de datos estructurados. Está escrita sobre numpy (escrito en c) por lo que cuenta con muy buen rendimiento. Esta libreria permite la lectura y escritura de datos en diferentes formatos, la manipulación de datos, la limpieza de datos y la creación de gráficos.
 \subsection{Apache Airflow}
@@ -135,7 +136,7 @@ En la primera fase del proyecto se compró un dongle RTL-SDR con el fin de recib
 
 Para hacer uso de estos dispositivos se ha de usar software como GQRX, CubicSDR o SDRSharp. Es posible también usar rtl-sdr en la terminal creando posteriormente un microfono virtual para que el software de análisis pueda decodificar los paquetes.
 
-Tras multitud de pruebas fallidas con distintos software de visualización y análisis y software de audio como direwolf, se decidió no continuar por ese camino y probar otras alternativas como la que finalmente se ha implementado el \textbf{APRS-IS} 
+Tras multitud de pruebas fallidas con distintos software de visualización y análisis y software de audio como direwolf, se decidió no continuar por ese camino y probar otras alternativas como la que finalmente se ha implementado el \textbf{APRS-IS}
 
 \subsection{APRS-IS}
 APRS-IS es un sistema que permite la transmisión de mensajes APRS por la red de Internet. La ventaja que ofrece este sistema frente al de recopilar información mediante una antena es que APRS-IS, permite obtener un flujo de datos mucho mayor ya que hay una gran cantidad de antenas y otra ventaja con la que cuenta es que no esta restringido al área que puede recibir la pequeña antena rtl-sdr sino a todo el mundo.
@@ -147,11 +148,11 @@ Componentes principales:
 	\item \textbf{Digipeaters:} Son estaciones que reciben los paquetes APRS y los retransmiten, permitiendo que los paquetes lleguen a una mayor distancia. Son análogos a los repetidores de internet.
 	\item \textbf{I-Gates:} Son estaciones que reciben los paquetes APRS por radio y los envian a la red APRS-IS, permitiendo que los paquetes sean accesibles a través de internet.
 	\item \textbf{Servidores APRS-IS:} Son servidores que reciben los paquetes APRS de los I-Gates y los almacenan en una base de datos, permitiendo que los clientes accedan a los paquetes a través de internet. Los servidores APRS-IS suelen estar distribuidos geográficamente para mejorar la disponibilidad y la redundancia.
-	\item \textbf{Clientes APRS-IS:} Pueden ser otros servidores, aplicaciones web o aplicaciones móviles que acceden a los servidores APRS-IS para obtener los paquetes APRS y mostrarlos a los usuarios. 
+	\item \textbf{Clientes APRS-IS:} Pueden ser otros servidores, aplicaciones web o aplicaciones móviles que acceden a los servidores APRS-IS para obtener los paquetes APRS y mostrarlos a los usuarios.
 \end{itemize}
 Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
 \begin{figure}[!h]
-	\centering 
+	\centering
 	\includegraphics[width=0.85\textwidth]{./Chapter_4/aprs_infra.png}
 	\caption{Infrasestructura de la red APRS - APRS-IS.}
 	\label{fig:aprs-infra}
@@ -166,12 +167,12 @@ Es importante mencionar que el sistema de recepción de paquetes APRS se ejecuta
 
 \subsection{Procesado de paquetes APRS}
 \subsubsection{Subida de ficheros a AWS S3}
-Una vez los ficheros se han guardado en el disco duro SSD, se procede a subirlos a un bucket S3 en AWS. Para ello se ha utilizado la libreria boto3 de Python, que permite interactuar con los servicios de AWS desde Python. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que sube los ficheros comprimidos al bucket S3. Una vez subidos los ficheros, se eliminan del disco duro SSD para liberar espacio. Cuando un fichero se se sube a S3 se desencadena un evento 
+Una vez los ficheros se han guardado en el disco duro SSD, se procede a subirlos a un bucket S3 en AWS. Para ello se ha utilizado la libreria boto3 de Python, que permite interactuar con los servicios de AWS desde Python. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que sube los ficheros comprimidos al bucket S3. Una vez subidos los ficheros, se eliminan del disco duro SSD para liberar espacio. Cuando un fichero se se sube a S3 se desencadena un evento
 \subsubsection{Procesado de paquetes APRS en AWS lambda}
-Una vez los ficheros se han subido a S3, se desencadena un evento que ejecuta una función lambda en AWS. Esta función lambda se encarga de descomprimir el fichero, procesar los mensajes APRS y convertirlos en formato Json. 
+Una vez los ficheros se han subido a S3, se desencadena un evento que ejecuta una función lambda en AWS. Esta función lambda se encarga de descomprimir el fichero, procesar los mensajes APRS y convertirlos en formato Json.
 
 Por defecto lambda no puede hacer uso de librerias de terceros por lo que se ha tenido que encapsular la libreria aprslib en un fichero zip, subirlo a lambda y establecerlo como una capa de lambda para poder hacer uso de ella.
-Para la descompresión de los ficheros se ha utilizado la libreria gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip. 
+Para la descompresión de los ficheros se ha utilizado la libreria gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip.
 Para el procesado de los mensajes APRS se ha utilizado la libreria aprslib de Python como ya hemos mencionado, que permite decodificar los mensajes APRS y extraer información útil como la posición, velocidad y rumbo de los objetos rastreados en formato clave-valor.
 Esta función lambda se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
 Finalmente los mensajes procesados se guardan en un bucket S3 de salida (aprsoutput) en formato Json para su posterior descarga. La descarga de los ficheros Json ocurre una vez al día mediante la orquestación de Apache Airflow y la libreria boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la raspberry pi.
@@ -245,9 +246,15 @@ El diseño de la aplicación web se ha basado en la simplicidad, la usabilidad y
 Este diseño se ha ido modificando y adaptando a lo largo del desarrollo del proyecto para mejorar la usabilidad y la experiencia del usuario. Este diseño muestra la pantalla principal de la aplicación, que incluye un mapa con las estaciones APRS, y un panel de control con filtros y opciones de visualización.
 
 \subsection{Home - Primera pantalla}
-En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización.
+En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización. 
 \subsubsection{Obtención de datos}
+
+Siguiendo la estrategia de otros sistemas de dashboarding como PowerBI o Tableau y con el objetivo de mejorar la eficiencia y la escalabilidad del sistema, se ha optado por eliminar en lo posible las consultas a la base de datos en tiempo real. Para ello se ha creado un sistema de caché que almacena los datos a respresentar en esta pantalla en un archivo de rápida lectura que es actualizado diariamente mediante Apache Airflow. Este sistema de caché permite reducir la carga en la base de datos y mejorar el rendimiento de la aplicación web. 
+
+El sistema de caché se ha implementado utilizando la libreria pandas de Python, usando un fichero feather para almacenar los datos en formato binario y comprimido y reducir dramáticamente\footnote{Los ficheros de tipo feather son hasta 100 veces más rápidos que los ficheros csv} el tiempo de carga de la página.
+
 \subsubsection{Mapa de estaciones APRS}
+
 El mapa de estaciones APRS muestra la posición de cada una de las estaciones APRS, representadas por un marcador en el mapa. Es una mapa interactivo que permite hacer zoom, desplazarse y al posicionar el cursor encima de una estación aparecerá un recuadro ofreciendo información adicional.
 
 Esta página hace uso de la libreria plotly para renderizar el mapa y del servicio web de mapas Mapbox para obtener los mapas y estilos de mapa.
@@ -257,21 +264,21 @@ El panel de control de la aplicación web incluye una serie de filtros y opcione
 \begin{itemize}
 	\item \textbf{Filtro por Rango de Fechas:} Permite filtrar las estaciones APRS por rango de fechas, mostrando solo las estaciones de las que se ha recibido algún mensaje en el rango de fechas seleccionado.
 	\item \textbf{Filtro por País:} Permite filtrar las estaciones APRS por país, mostrando solo las estaciones que se encuentran en el país seleccionado.
-	\item \textbf{Filtro por contenido del mensaje:} Este es quizás el filtro más interesante ya que permite filtrar las estaciones por el contenido del mensaje, este filtro será explicado más adelante. 
+	\item \textbf{Filtro por contenido del mensaje:} Este es quizás el filtro más interesante ya que permite filtrar las estaciones por el contenido del mensaje, este filtro será explicado más adelante.
 	\item \textbf{Filtro por Tipo de Estación:} Permite filtrar las estaciones APRS por tipo, mostrando solo las estaciones que corresponden al tipo seleccionado.
 	\item \textbf{Filtro por ssid:} Permite filtrar las estaciones por ssid.
 \end{itemize}
 
 \subsubsection{Búsqueda difusa en contenido de mensajes}
-Este filtro es personalmente el más interesante de todos los filtros disponibles. El objetivo es permitir al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase especifica. Para ello se han probado varias alternativas como el uso de expresiones regulares o una implementación en python puro. El problema de estas opciones es que son muy lentas para el enorme volumen de datos con el que se cuenta y al ser dinámico no era factible realizar esa búsqueda en tiempo real. 
+Este filtro es personalmente el más interesante de todos los filtros disponibles. El objetivo es permitir al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase especifica. Para ello se han probado varias alternativas como el uso de expresiones regulares o una implementación en python puro. El problema de estas opciones es que son muy lentas para el enorme volumen de datos con el que se cuenta y al ser dinámico no era factible realizar esa búsqueda en tiempo real.
 Finalmente se ha optado por el uso de Postgres FTS (Full Text Search). Postgres FTS es un sistema de búsqueda de texto completo que permite realizar búsquedas de texto en grandes volúmenes de datos de manera eficiente. Las ventajas que ofrece este sistema son:
 
 \begin{itemize}
 	\item \textbf{Rendimiento:} Todo el proceso de búsqueda se realiza en la base de datos, lo que permite realizar búsquedas de texto sin transferir todos los mensajes al servidor para su búsqueda.
 	\item \textbf{Búsqueda difusa:} Permite realizar búsquedas de texto difuso, lo que significa que se pueden buscar palabras o frases que contengan errores tipográficos o que no coincidan exactamente con el texto buscado.
-	\item \textbf{Indexación:} Postgres FTS indexa automáticamente los mensajes de texto, lo que permite realizar búsquedas de texto de manera eficiente incluso en grandes volúmenes de datos. 
+	\item \textbf{Indexación:} Postgres FTS indexa automáticamente los mensajes de texto, lo que permite realizar búsquedas de texto de manera eficiente incluso en grandes volúmenes de datos.
 \end{itemize}
-Se ha creado un índice de texto completo en la columna de mensajes de la tabla de mensajes y se ha utilizado la función to\textunderscore tsvector para convertir los mensajes en un vector de texto completo. Posteriormente se ha utilizado la función plainto\textunderscore tsquery para convertir la palabra o frase de búsqueda en una consulta de texto completo y finalmente se ha utilizado la función ts\textunderscore query para realizar la búsqueda de texto completo en la columna de mensajes. Este filtro permite al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, lo que facilita la identificación y el análisis de los mensajes relevantes. 
+Se ha creado un índice de texto completo en la columna de mensajes de la tabla de mensajes y se ha utilizado la función to\textunderscore tsvector para convertir los mensajes en un vector de texto completo. Posteriormente se ha utilizado la función plainto\textunderscore tsquery para convertir la palabra o frase de búsqueda en una consulta de texto completo y finalmente se ha utilizado la función ts\textunderscore query para realizar la búsqueda de texto completo en la columna de mensajes. Este filtro permite al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, lo que facilita la identificación y el análisis de los mensajes relevantes.
 Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal con la lista de todos los mensajes que contienen la palabra o frase de búsqueda, ordenados por relevancia haciendo uso de la función ts\textunderscore rank. Otra funcionalidad interesante es que la palabra o palabras buscadas se resaltan en el mensaje para facilitar su identificación como se muestra en la \Cref{fig:postgres-fts}.
 
 \begin{figure}[h]
@@ -286,12 +293,12 @@ En el modal se muestra una tabla de dos columnas, la columna izquierda contiene 
 \subsection{Station - Segunda pantalla}
 Esta es la página que hace única a APRSINT. En esta página se muestra la información detallada de una estación APRS en concreto. Se puede llegar a esta pantalla desde la página principal haciendo clic en un marcador de una estación en el mapa, haciendo click en una estación en la búsqueda en los mensajes o haciendo click en un nodo del grafo de la página 3. La pantalla station esta dividida en tres secciones.
 
-\subsubsection{Perfil de QRZ}
+\subsubsection{Información de QRZ}
 QRZ es una base de datos de radioaficionados que contiene información detallada sobre los radioaficionados de todo el mundo. Para acceder a la información disponible en la web qrz es necesario tener una cuenta y estar registrado. QRZ cuenta con un servicio de API que permite acceder a la información de los radioaficionados de manera programática. Para mantener APRSINT fiel a los principios del OSINT (fuentes abiertas) se ha optado por no utilizar la API e intentar otra opción.
 
 Utilizando una cuenta normal gratuita en QRZ, se permiten realizar hasta 25 visualizaciones de perfiles diarias en su sitio web. Con el objetivo de aumentar la cantidad de visualizaciones disponibles, se ha optado por implementar web scraping mediante un sistema propio de rotación de cuentas gratuitas y utilizando la libreria \textit{BeautifulSoup}. Como parte de esta estrategia, se ha creado una tabla en la base de datos para almacenar en caché las solicitudes, lo que reduce el número de solicitudes a una misma estación si esta ya ha sido consultada previamente.
 
-Este módulo es de los más complejos de la aplicación pero a su vez de los más útiles ya que permite al usuario obtener información muy detallada de una estación APRS en concreto y de la persona que está detras. Algunos de los datos que se pueden obtener son: 
+Este módulo es de los más complejos de la aplicación pero a su vez de los más útiles ya que permite al usuario obtener información muy detallada de una estación APRS en concreto y de la persona que está detras. Algunos de los datos que se pueden obtener son:
 
 \begin{itemize}
 	\item Nombre de la persona registrada
@@ -301,7 +308,23 @@ Este módulo es de los más complejos de la aplicación pero a su vez de los má
 	\item Fecha de nacimiento de la persona registrada
 \end{itemize}
 
+\subsubsection{Información de posiciones}
+Esta sección se compone de dos partes. En la parte superior se muestra un mapa con todas las posiciones reportadas por la estación, se muestra también la caja delimitadora de todas las posiciones. 
 
+En la parte inferior se muestran estadísticas de las posiciones reportadas por la estación como la frecuencia media de emisión, la primera y última emisión recibida y por cada mensaje emitido por la estación se muestra el numero de repeticiones del mensaje y las urls (si existen) encontradas en los mensajes.
+
+\subsubsection{Información de mensajes}
+Finalmente encontramos la sección de mensajes. En esta sección se muestra una tabla en la que se muestra la información de los mensajes emitidos por la estación. La tabla se compone de las siguientes columnas:
+\begin{itemize}
+	\item La fecha de emisión del mensaje.
+	\item La latitud y longitud de la estación en el momento de la emisión.
+	\item El país en el que se encontraba la estación en el momento de la emisión.
+	\item La estación destino del mensaje.
+	\item El \textit{path} es decir los digipeaters que han retransmitido el mensaje.
+	\item El contenido del mensaje.
+\end{itemize} 
+
+La tabla es interactiva y permite al usuario filtrar los mensajes por el intervalo de fechas que pretenda.
 
 \subsection{Graph - Tercera pantalla}
 Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en el que los nodos son las estaciones y las aristas dirigidas, mensajes como se muestra en la \Cref{fig:graph}. El grafo es interactivo y permite hacer zoom, desplazarse y al posicionar el cursor encima de un nodo o arista aparecerá un recuadro ofreciendo información adicional. El color y tamaño de los nodos depende de la cantidad de mensajes que ha emitido o recibido la estación y de misma manera el color y tamaño de las aristas depende de la cantidad de mensajes que se han emitido o recibido desde la estación origen y destino.
@@ -320,13 +343,13 @@ Las características que se buscaban en la solución final eran:
 	\item \textbf{Rendimiento:} Quizás la característica más importante, el grafo debia ser capaz de mostrar una gran cantidad de estaciones y conexiones sin afectar al rendimiento de la aplicación.
 	\item \textbf{Personalización:} Se buscaba un grafo que permitiera personalizar la apariencia y el comportamiento de los nodos y aristas según las características de cada estación y mensaje.
 \end{itemize}
-Para alcanzar la solución final que se presenta ahora en la página, se han probado muchas opciones que se han ido descartando por diferentes motivos. 
+Para alcanzar la solución final que se presenta ahora en la página, se han probado muchas opciones que se han ido descartando por diferentes motivos.
 \subsubsection{Alternativas probadas}
-En un primer momento se intentó utilizar la libreria \textbf{networkx} de Python para la creación del grafo, sin embargo, se descartó debido a su rendimiento y a su falta de interactividad. Posteriormente se intentó utilizar la libreria \textbf{Cytoscape} que es la solución estandard que ofrece Dash, esta ofrece una gran cantidad de funcionalidades para la creación de grafos interactivos, sin embargo, se descartó de nuevo debido a su pobre rendimiento. 
+En un primer momento se intentó utilizar la libreria \textbf{networkx} de Python para la creación del grafo, sin embargo, se descartó debido a su rendimiento y a su falta de interactividad. Posteriormente se intentó utilizar la libreria \textbf{Cytoscape} que es la solución estandard que ofrece Dash, esta ofrece una gran cantidad de funcionalidades para la creación de grafos interactivos, sin embargo, se descartó de nuevo debido a su pobre rendimiento.
 
 Una de las alternativas que también se probó fue la libreria \textbf{Sigma JS} que ofrece una gran cantidad de funcionalidades y personalización para la creación de grafos interactivos. Esta libreria cuenta con una funcionalidad interesante \textit{forceAtlas2} que permite calcular mediante una simulación de fuerzas la posición de los nodos y aristas en el grafo. Sin embargo, de nuevo se descartó debido a su rendimiento con una gran cantidad de nodos y aristas.
 
-Finalmente se optó por la libreria \textbf{Cosmograph JS}. Cosmograph utiliza la libreria \textit{cosmos} de calculo de posiciones mediante la gpu y por tanto puede manejar un gran numero de nodos y aristas. 
+Finalmente se optó por la libreria \textbf{Cosmograph JS}. Cosmograph utiliza la libreria \textit{cosmos} de calculo de posiciones mediante la gpu y por tanto puede manejar un gran numero de nodos y aristas.
 
 \subsubsection{El grafo}
 El problema principal con Cosmograph ha sido la falta de documentación debido a que es bastante nueva y la dificultad de integrarla con Dash. Esta libreria esta publicada en npm y se ha tenido que utilizar bundle.js para convertir el código de JavaScript en un solo fichero que se pueda importar en Dash. Ha sido necesario modificar ligeramente la libreria para terminar de integrarla con Dash.
@@ -336,3 +359,50 @@ Se han utilizado tres componentes de Cosmograph JS para la creación del grafo, 
 Para mejorar el rendimiento general de la web se ha utilizado la técnica de lazy loading, que consiste en cargar los componentes del grafo solo cuando el usuario presiona el boton \textit{Load graph}. En el momento que el usuario presiona el boton, se activa un callback de cliente de Dash. El callback primero lee los datos del grafo de un fichero CSV que se actualiza diariamente mediante Apache Airflow. Posteriormente se crean los nodos y las aristas y se inicializa el grafo, la barra de búsqueda y la barra de tiempo. Seguidamente se establecen los paramentros de la simulación de fuerzas y se inicia la simulación. Por último se establecen las propiedades visuales y funcionales de los nodos y aristas.
 
 Cuando el usuario arrastra el cursor sobre un nodo, se muestra un recuadro con el nombre de la estación. Cuando el usuario hace clic en un nodo, se le redirige a la página \textbf{station} de la estación seleccionada.
+
+\section{Orquestación}
+
+En esta sección se describirá con detalle la metodología de orquestación de tareas y flujos de trabajo de la aplicación que se han ido comentando a lo largo del capítulo.
+
+\subsection{Supervisord}
+Supervisord es un sistema de control de procesos para sistemas operativos tipo Unix, diseñado para iniciar, detener y gestionar procesos de manera sencilla y robusta.
+
+Se ha utilizado Supervisord como gestor de procesos para ejecutar en modo demonio como se ha mencionado previamente el sistema de recepción de paquetes APRS. Se ha establecido en la configuración de Supervisord que el sistema de recepcion de paquetes se ejecute en el arranque del sistema y siempre después de que la interfaz de red esté disponible. En caso de fallo del sistema de recepción, Supervisord reiniciará el sistema y registrará la causa del fallo.
+
+\section{Apache Airflow}
+Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo. Es similar a Cron de Unix pero permite al usuario una mayor personalización y un mayor control sobre las tareas que controla. La unidad de ejecución en Apache Airflow es el DAG (Directed Acyclic Graph). Las tareas se definen en archivos individuales y al igual que en otros sistemas se pueden definir dependencias entre tareas.
+
+Apache Airflow se ha utilizado para orquestar todas las tareas que permiten que APRSINT funcione correctamente se presenta en la \Cref{tab:airflow-sched} la lista de los dags que se ejecutan diariamente.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|l|l|}
+        \hline
+        \textbf{Hora de ejecución} & \textbf{DAG} & \textbf{Descripción} \\
+        \hline
+        3:00 am & upload\_files & Sube todos los archivos al S3 aprsinput \\
+        \hline
+        5:00 am & download\_files & Descarga todos los archivos a la carpeta local \\
+        \hline
+        7:00 am & insert\_database & Inserta todos los mensajes en la BBDD \\
+		\hline
+        9:00 am & cache\_data & Precalcula en archivos los datos para la web \\
+        \hline
+    \end{tabular}
+    \caption{Esquema de orquestacion con Apache Airflow.}
+    \label{tab:airflow-sched}
+\end{table}
+
+\section{Alojamiento}
+Para alojar tanto la aplicación web como el sistema de recepción de paquetes y la base de datos de APRSINT se ha optado por utilizar una raspberry Pi 4 conectada a un internet residencial. 
+
+Para evitar los problemas que suponen las direcciones dinámicas se ha optado por utilizar el servicio de DNS dinámico de no-ip que permite asignar un nombre de dominio a una dirección IP dinámica. 
+
+\subsection{Servidor Web}
+Insertar la solución escogida (Probablemente Nginx)
+
+
+\subsection{Protección ante ataques}
+
+Para el todo el desarrollo de la aplicación se ha utilizado el protocolo ssh.
+Se han amplicado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados. 
