@@ -118,6 +118,29 @@ Se ha seleccionado Supervidord como gestor de procesos gracias a su facilidad, f
 
 \subsection{Pandas}
 Pandas es la librería de facto de Python para el manejo y análisis de datos estructurados. Está escrita sobre Numpy (escrito en c) por lo que cuenta con muy buen rendimiento. Esta librería permite la lectura y escritura de datos en diferentes formatos, la manipulación de datos, la limpieza de datos y la creación de gráficos.
+
+\subsection{Conda}
+Conda es un gestor de paquetes, entornos y canales de código abierto que facilita la instalación y gestión de paquetes y dependencias en Python. Conda permite crear entornos virtuales aislados para proyectos específicos, lo que facilita la gestión de dependencias y la compatibilidad entre versiones de paquetes. Se ha seleccionado conda como gestor de paquetes para la instalación de las librerías y dependencias necesarias para la aplicación.
+
+\begin{itemize}
+	\item \textbf{Gestión de paquetes:} Conda facilita la instalación, actualización y eliminación de paquetes de software. Esto es particularmente útil cuando se trabaja en proyectos que requieren bibliotecas específicas con versiones concretas.
+
+	\item \textbf{Entornos virtuales:} Conda permite la creación de entornos virtuales independientes para cada proyecto. Esto significa que pueden existir diferentes versiones de paquetes instaladas en diferentes entornos sin que entren en conflicto entre sí. Esto es especialmente útil cuando se necesita trabajar en proyectos con diferentes requisitos de dependencias.
+
+	\item \textbf{Portabilidad y reproducibilidad:} Al utilizar Conda para gestionar las dependencias de los proyectos, se puede garantizar que otros puedan reproducir el entorno de desarrollo exactamente como estaba. Esto es fundamental para la colaboración en proyectos de software y la investigación reproducible en ciencia de datos.
+
+	\item \textbf{Flexibilidad:} Conda no se limita solo al ecosistema de Python. También puede gestionar paquetes de otros lenguajes de programación, como R, Java y C/C++. Esto lo convierte en una herramienta versátil para proyectos que involucran múltiples tecnologías.
+\end{itemize}
+
+\subsection{Click}
+Click es una librería de Python que permite la creación de herramientas de línea de comandos de manera sencilla y eficiente. Click facilita la creación de interfaces de usuario basadas en texto, lo que permite a los usuarios interactuar con las aplicaciones a través de la terminal. Se muestra un ejemplo de uso de Click en la \Cref{fig:click-example}.
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/click_help.png}
+	\caption{Ejemplo de uso de Click.}
+	\label{fig:click-example}
+\end{figure}
+
 \subsection{Apache Airflow}
 Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo. Es similar a Cron de Unix, pero permite una mayor personalización y control de las tareas que ejecuta. Las tareas se definen en archivos separados facilitando la compartimentalización y ofreciendo una mayor robustez y escalabilidad.
 \begin{itemize}
@@ -127,8 +150,27 @@ Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo.
 	\item \textbf{Extensibilidad:} Airflow es altamente extensible y permite integrar fácilmente con otros sistemas y herramientas, lo que permite construir flujos de trabajo personalizados que se adapten a las necesidades específicas del proyecto.
 \end{itemize}
 
+\subsection{Configuración del proyecto}
+
+Para la configuración del proyecto se ha utilizado un entorno virtual de conda. Se ha creado un entorno virtual con las librerías necesarias para la ejecución de la aplicación. Algunas de las librerías más importantes que se han utilizado son las siguientes:
+
+\begin{itemize}
+	\item \textbf{aprslib:} Para la recepción y decodificación de paquetes APRS.
+	\item \textbf{boto3:} Para la interacción con los servicios de AWS.
+	\item \textbf{SQLAlchemy:} Para la interacción con la base de datos PostgreSQL.
+	\item \textbf{pandas:} Para la compresión y descompresión de ficheros.
+	\item \textbf{dash:} Para la creación de la aplicación web interactiva.
+	\item \textbf{click:} Para la creación de herramientas de línea de comandos.
+\end{itemize}
+
+Se ha creado un archivo de configuración en el que se definen las variables de entorno necesarias para la ejecución de la aplicación. Estas variables incluyen la configuración de la base de datos, las credenciales de AWS, la configuración de la aplicación web, entre otras.
+
+Adicionalmente se ha configurado el proyecto con setuptools para facilitar la instalación y distribución de la aplicación. Se ha creado un archivo setup.py en el que se definen las dependencias del proyecto y se especifica la estructura del proyecto. Esto permite instalar la aplicación con un simple comando de pip.
+$$pip\ install\ -i\ .$$
+
 \section{Adquisición de datos}
 En esta sección se describirá con detalle el módulo de adquisición de datos de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
+
 \subsection{RTL-SDR}
 En la primera fase del proyecto se compró un dongle RTL-SDR con el fin de recibir los paquetes APRS y procesarlos a partir de ello. Estos dongles son relativamente baratos oscilando entre los 30 y 100 euros, se conectan mediante usb al ordenador y tienen en la parte superior un conector SMA para conectar una antena. La peculiaridad de estos dispositivos reside en que son controlables mediante software y se pueden sintonizar en un rango de frecuencias muy amplio (24MHz a 1.7GHz).
 
@@ -139,6 +181,7 @@ Tras multitud de pruebas fallidas con distintos software de visualización y an�
 \subsection{APRS-IS}
 APRS-IS es un sistema que permite la transmisión de mensajes APRS por la red de Internet. La ventaja que ofrece este sistema frente al de recopilar información mediante una antena es que APRS-IS, permite obtener un flujo de datos mucho mayor, ya que hay una gran cantidad de antenas y otra ventaja con la que cuenta es que no está restringido al área que puede recibir la pequeña antena rtl-sdr sino a todo el mundo.
 
+
 \subsubsection{Infraestructura de la red APRS-IS}
 Componentes principales:
 \begin{itemize}
@@ -148,7 +191,9 @@ Componentes principales:
 	\item \textbf{Servidores APRS-IS:} Son servidores que reciben los paquetes APRS de los I-Gates y los almacenan en una base de datos, permitiendo que los clientes accedan a los paquetes a través de internet. Los servidores APRS-IS suelen estar distribuidos geográficamente para mejorar la disponibilidad y la redundancia.
 	\item \textbf{Clientes APRS-IS:} Pueden ser otros servidores, aplicaciones web o aplicaciones móviles que acceden a los servidores APRS-IS para obtener los paquetes APRS y mostrarlos a los usuarios.
 \end{itemize}
+
 Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
+
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/aprs_infra.png}
@@ -159,13 +204,18 @@ Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
 Se ha seleccionado APRS-IS como fuente de datos para la aplicación debido a su facilidad de uso, su disponibilidad y la gran cantidad de información que ofrece.
 
 \subsection{Recepción de paquetes APRS}
+
 Para la recepción de paquetes APRS se ha utilizado la librería aprslib de Python. Esta librería permite conectarse a un servidor APRS-IS y recibir los paquetes APRS en tiempo real. Se ha creado un sistema que utilizando esta librería se conecta a un servidor APRS-IS, recibe los paquetes APRS y los guarda en un buffer en memoria. Cuando el buffer se llena con aproximadamente 10.000 mensajes en aproximadamente 15 segundos, se procede a escribir el buffer en un fichero comprimido en el disco duro SSD.
+
 Una cosa curiosa es que los mensajes APRS no se decodifican en este punto, de hecho se guardan sin ningún tipo de procesamiento en ficheros binarios comprimidos en formato gzip para no ocupar mucho espacio en disco. Esto se hace así para evitar la sobrecarga de procesamiento en la Raspberry pi y para poder procesar los mensajes en un servidor más potente en la nube.
 
 Es importante mencionar que el sistema de recepción de paquetes APRS se ejecuta en segundo plano en modo demonio utilizando el gestor de procesos Supervisord, lo que garantiza que el sistema se mantenga en funcionamiento incluso en caso de fallos o reinicios del sistema.
 
 \subsection{Procesado de paquetes APRS}
+En esta sección se describirá con detalle el módulo de procesado de paquetes APRS de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
+
 \subsubsection{Subida de ficheros a AWS S3}
+
 Una vez los ficheros se han guardado en el disco duro SSD, se procede a subirlos a un Bucket S3 en AWS. Para ello se ha utilizado la librería boto3 de Python, que permite interactuar con los servicios de AWS desde Python. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que sube los ficheros comprimidos al bucket S3. Una vez subidos los ficheros, se eliminan del disco duro SSD para liberar espacio. Cuando un fichero se sube sube a S3 se desencadena un evento
 \subsubsection{Procesado de paquetes APRS en AWS lambda}
 Una vez los ficheros se han subido a S3, se desencadena un evento que ejecuta una función lambda en AWS. Esta función lambda se encarga de descomprimir el fichero, procesar los mensajes APRS y convertirlos en formato JSON.
@@ -223,7 +273,9 @@ En esta sección se describirá con detalle el módulo de visualización y prese
 
 \subsection{Dash}
 Dash es un framework de Python creado por Plotly para la creación de aplicaciones web interactivas y visualizaciones de datos. Dash permite crear aplicaciones web interactivas y visualizaciones de datos atractivas utilizando Python como lenguaje de programación. Dash está escrito encima de Plotly.js, React y Flask lo que permite una gran capacidad de personalización.
+
 Dash ofrece una versión de pago llamada Dash Enterprise que ofrece una gran cantidad de funcionalidades para elaborar aplicaciones web de manera más rápida y sencilla. Sin embargo, para este proyecto se ha utilizado la versión gratuita de Dash, con algunas librerías adicionales entre las que se encuentran:
+
 \begin{itemize}
 	\item \textbf{Dash Core Components:} Ofrece una amplia gama de componentes interactivos como gráficos, tablas, sliders, dropdowns, entre otros, que permiten a los usuarios interactuar con los datos de manera intuitiva.
 	\item \textbf{Dash HTML Components:} Ofrece una amplia gama de componentes HTML como divs, spans, inputs, entre otros, que permiten personalizar la apariencia y el diseño de la aplicación web.
@@ -245,10 +297,10 @@ El diseño de la aplicación web se ha basado en la simplicidad, la usabilidad y
 Este diseño se ha ido modificando y adaptando a lo largo del desarrollo del proyecto para mejorar la usabilidad y la experiencia del usuario. Este diseño muestra la pantalla principal de la aplicación, que incluye un mapa con las estaciones APRS, y un panel de control con filtros y opciones de visualización.
 
 \subsection{Home - Primera pantalla}
-En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización. 
+En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización.
 \subsubsection{Obtención de datos}
 
-Siguiendo la estrategia de otros sistemas de dashboarding como PowerBI o Tableau y con el objetivo de mejorar la eficiencia y la escalabilidad del sistema, se ha optado por eliminar en lo posible las consultas a la base de datos en tiempo real. Para ello se ha creado un sistema de caché que almacena los datos a representar en esta pantalla en un archivo de rápida lectura que es actualizado diariamente mediante Apache Airflow. Este sistema de caché permite reducir la carga en la base de datos y mejorar el rendimiento de la aplicación web. 
+Siguiendo la estrategia de otros sistemas de dashboarding como PowerBI o Tableau y con el objetivo de mejorar la eficiencia y la escalabilidad del sistema, se ha optado por eliminar en lo posible las consultas a la base de datos en tiempo real. Para ello se ha creado un sistema de caché que almacena los datos a representar en esta pantalla en un archivo de rápida lectura que es actualizado diariamente mediante Apache Airflow. Este sistema de caché permite reducir la carga en la base de datos y mejorar el rendimiento de la aplicación web.
 
 El sistema de caché se ha implementado utilizando la librería Pandas de Python, usando un fichero .feather para almacenar los datos en formato binario y comprimido y reducir dramáticamente\footnote{Los ficheros de tipo .feather son hasta 100 veces más rápidos que los ficheros .csv} el tiempo de carga de la página.
 
@@ -260,6 +312,7 @@ Esta página hace uso de la librería Plotly para renderizar el mapa y del servi
 
 \subsubsection{Filtros}
 El panel de control de la aplicación web incluye una serie de filtros y opciones de visualización que permiten al usuario personalizar la información mostrada en el mapa. La ventaja de estos filtros es que son aditivos y se pueden combinar para obtener con exactitud la información requerida. Los filtros disponibles son:
+
 \begin{itemize}
 	\item \textbf{Filtro por Rango de Fechas:} Permite filtrar las estaciones APRS por rango de fechas, mostrando solo las estaciones de las que se ha recibido algún mensaje en el rango de fechas seleccionado.
 	\item \textbf{Filtro por País:} Permite filtrar las estaciones APRS por país, mostrando solo las estaciones que se encuentran en el país seleccionado.
@@ -270,6 +323,7 @@ El panel de control de la aplicación web incluye una serie de filtros y opcione
 
 \subsubsection{Búsqueda difusa en contenido de mensajes}
 Este filtro es personalmente el más interesante de todos los filtros disponibles. El objetivo es permitir al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase especifica. Para ello se han probado varias alternativas como el uso de expresiones regulares o una implementación en Python puro. El problema de estas opciones es que son muy lentas para el enorme volumen de datos con el que se cuenta y al ser dinámico no era factible realizar esa búsqueda en tiempo real.
+
 Finalmente se ha optado por el uso de Postgresql FTS (Full Text Search). Postgres FTS es un sistema de búsqueda de texto completo que permite realizar búsquedas de texto en grandes volúmenes de datos de manera eficiente. Las ventajas que ofrece este sistema son:
 
 \begin{itemize}
@@ -308,7 +362,7 @@ Este módulo es de los más complejos de la aplicación, pero a su vez de los m�
 \end{itemize}
 
 \subsubsection{Información de posiciones}
-Esta sección se compone de dos partes. En la parte superior se muestra un mapa con todas las posiciones reportadas por la estación, se muestra también la caja delimitadora de todas las posiciones. 
+Esta sección se compone de dos partes. En la parte superior se muestra un mapa con todas las posiciones reportadas por la estación, se muestra también la caja delimitadora de todas las posiciones.
 
 En la parte inferior se muestran estadísticas de las posiciones reportadas por la estación como la frecuencia media de emisión, la primera y última emisión recibida y por cada mensaje emitido por la estación se muestra el número de repeticiones del mensaje y las urls (si existen) encontradas en los mensajes.
 
@@ -321,7 +375,7 @@ Finalmente encontramos la sección de mensajes. En esta sección se muestra una 
 	\item La estación destino del mensaje.
 	\item El \textit{path} es decir los digipeaters que han retransmitido el mensaje.
 	\item El contenido del mensaje.
-\end{itemize} 
+\end{itemize}
 
 La tabla es interactiva y permite al usuario filtrar los mensajes por el intervalo de fechas que pretenda.
 
@@ -374,34 +428,96 @@ Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo.
 Apache Airflow se ha utilizado para orquestar todas las tareas que permiten que APRSINT funcione correctamente se presenta en la \Cref{tab:airflow-sched} la lista de los DAG's que se ejecutan diariamente.
 
 \begin{table}[htbp]
-    \centering
-    \begin{tabular}{|c|l|l|}
-        \hline
-        \textbf{Hora de ejecución} & \textbf{DAG} & \textbf{Descripción} \\
-        \hline
-        3:00 am & upload\_files & Sube todos los archivos al S3 aprsinput \\
-        \hline
-        5:00 am & download\_files & Descarga todos los archivos a la carpeta local \\
-        \hline
-        7:00 am & insert\_database & Inserta todos los mensajes en la BBDD \\
+	\centering
+	\begin{tabular}{|c|l|l|}
 		\hline
-        9:00 am & cache\_data & Precalcula en archivos los datos para la web \\
-        \hline
-    \end{tabular}
-    \caption{Esquema de orquestaciÓn con Apache Airflow.}
-    \label{tab:airflow-sched}
+		\textbf{Hora de ejecución} & \textbf{DAG}     & \textbf{Descripción}                           \\
+		\hline
+		3:00 am                    & upload\_files    & Sube todos los archivos al S3 aprsinput        \\
+		\hline
+		5:00 am                    & download\_files  & Descarga todos los archivos a la carpeta local \\
+		\hline
+		7:00 am                    & insert\_database & Inserta todos los mensajes en la BBDD          \\
+		\hline
+		9:00 am                    & cache\_data      & Precalcula en archivos los datos para la web   \\
+		\hline
+	\end{tabular}
+	\caption{Esquema de orquestaciÓn con Apache Airflow.}
+	\label{tab:airflow-sched}
 \end{table}
 
-\section{Alojamiento}
-Para alojar tanto la aplicación web como el sistema de recepción de paquetes y la base de datos de APRSINT se ha optado por utilizar una raspberry Pi 4 conectada a un internet residencial. 
+Por defecto Apache Airflow utiliza una base de datos SQLite para almacenar los metadatos de las tareas y los flujos de trabajo. Sin embargo, para este proyecto se ha optado por utilizar una base de datos PostgreSQL para almacenar los metadatos de Apache Airflow. Esto se ha hecho para mejorar la escalabilidad y sobre todo la fiabilidad del sistema.
 
-Para evitar los problemas que suponen las direcciones dinámicas se ha optado por utilizar el servicio de DNS dinámico de no-ip que permite asignar un nombre de dominio a una dirección IP dinámica. 
+Se ha creado también un usuario en la base de datos de PostgreSQL con permisos de lectura y escritura para Apache Airflow. Se ha configurado Apache Airflow para que utilice esta base de datos y este usuario en el archivo de configuración de Apache Airflow.
+
+Otra configuración importante que se ha realizado en Apache Airflow es el cambio del ejecutor por defecto de SequentialExecutor a LocalExecutor. El ejecutor por defecto de Apache Airflow es SequentialExecutor, que ejecuta las tareas de manera secuencial en un solo hilo. Sin embargo, no se recomienda el uso de este ejecutor por lo que para mejorar el rendimiento y la escalabilidad del sistema se ha optado por utilizar LocalExecutor, que ejecuta las tareas de manera paralela en varios hilos.
+
+Se presenta en la \Cref{fig:airflow-dashboard} la interfaz de Apache Airflow con los DAG's que se ejecutan diariamente.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{Imagenes/Chapter_4/airflow_dashboard.png}
+	\caption{Interfaz de Apache Airflow.}
+	\label{fig:airflow-dashboard}
+\end{figure}
+
+\section{Alojamiento}
+Para alojar tanto la aplicación web como el sistema de recepción de paquetes y la base de datos de APRSINT se ha optado por utilizar una Raspberry Pi 4 conectada a un internet residencial.
+
+Para evitar los problemas que suponen las direcciones dinámicas se ha decidido por utilizar el servicio de DNS dinámico de no-ip que permite asignar un nombre de dominio a una dirección IP dinámica. Este sistema se ha configurado en el router de modo que cuando la dirección ip cambia, el router notifica a no-ip y este actualiza el registro DNS asociado a la ip antigua por la nueva dirección.
+
+Se ha configurado también la redirección de puertos en el router para permitir el acceso a la Raspberry Pi desde el exterior. Los servidores que se encuentran actualmente en la Raspberry Pi son:
+\begin{itemize}
+	\item \textbf{Servidor Web:} Se ha configurado un servidor web Nginx para servir la aplicación web de APRSINT.
+	\item \textbf{Base de Datos:} Se ha configurado un servidor PostgreSQL para almacenar los metadatos de Apache Airflow y los datos de los mensajes APRS.
+	\item \textbf{Apache Airflow:} Se ha configurado un servidor Apache Airflow para orquestar las tareas y flujos de trabajo de APRSINT.
+	\item \textbf{Servidor SSH:} Se ha configurado un servidor SSH para permitir el acceso remoto a la Raspberry Pi y realizar todo el desarrollo.
+\end{itemize}
 
 \subsection{Servidor Web}
-Insertar la solución escogida (Probablemente Nginx)
 
+En esta sección se describe la arquitectura del servidor web que aloja la aplicación Dash utilizando Flask como backend, junto con Gunicorn y Nginx como reverse proxy.
+
+\subsubsection{Flask}
+
+Flask es un framework web ligero para Python que proporciona herramientas para crear aplicaciones web de forma rápida y sencilla. En esta aplicación, Flask se utiliza como el framework backend para la aplicación de Dash. Proporciona las rutas y la lógica de negocio necesarias para la aplicación.
+
+\subsubsection{Gunicorn}
+
+Gunicorn es un servidor HTTP WSGI (Web Server Gateway Interface) para Python. Se utiliza para servir la aplicación Flask de forma eficiente y escalable. Gunicorn gestiona múltiples procesos de forma paralela, lo que mejora el rendimiento de la aplicación. Para APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un socket UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
+
+\subsubsection{Nginx}
+
+Nginx es un servidor web de código abierto que en este caso se ha utilizado como proxy inverso. Actúa como intermediario entre los clientes y el servidor Flask/Gunicorn. Nginx se encarga de recibir las solicitudes HTTP, dirigirlas al servidor Gunicorn y devolver las respuestas a los clientes. Nginx maneja tareas como el balanceo de carga, el almacenamiento en caché la compresión de archivos y la seguridad.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Imagenes/Chapter_4/web_server.png}
+	\caption{Arquitectura del servidor web de APRSINT.}
+	\label{fig:web-server}
+\end{figure}
+
+El diagrama de la arquitectura del servidor web se muestra en la Figura \Cref{fig:web-server}. Como se puede observar, la solicitud HTTP del cliente pasa a través de Nginx, que actúa como un proxy inverso y la reenvía a Gunicorn, donde se ejecuta la aplicación Flask. Una vez que Flask procesa la solicitud, la respuesta se envía de vuelta al cliente a través de Nginx.
+
+\subsubsection{Flujo de una petición HTTP}
+
+A continuación se describe cómo se maneja una solicitud HTTP desde se recibe en Nginx hasta que se envía la respuesta de vuelta al cliente. A continuación se detalla el proceso paso a paso:
+
+\begin{enumerate}
+	\item Un usuario busca en su navegador la aplicación web de APRSint.
+	\item La solicitud llega al servidor Nginx, que actúa como el servidor frontal.
+	\item Nginx examina la solicitud y determina que está destinada a la aplicación Dash, por lo que la reenvía al servidor Gunicorn.
+	\item Gunicorn recibe la solicitud y la asigna a uno de sus 4 procesos de Flask para su procesamiento.
+	\item La aplicación Flask ejecuta la lógica correspondiente a la solicitud, que incluyen el acceso a la base de datos, y la generación del contenido de la página.
+	\item Una vez que la lógica de la aplicación Flask se ha completado, se genera una respuesta.
+	\item La respuesta se envía de vuelta a Gunicorn, que la reenvía a Nginx.
+	\item Nginx recibe la respuesta y la devuelve al cliente que realizó la solicitud original.
+\end{enumerate}
+
+Este proceso asegura que las solicitudes sean manejadas de manera eficiente y escalable, garantizando una experienci de navegación más fluida.
 
 \subsection{Protección ante ataques}
 
 Para todo el desarrollo de la aplicación se ha utilizado el protocolo ssh.
-Se han ampliado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados. 
+Se han ampliado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados.
