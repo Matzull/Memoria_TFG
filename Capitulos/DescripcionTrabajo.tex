@@ -16,7 +16,7 @@ Se pueden categorizar los tres módulos (\textbf{Adquisición de datos}, \textbf
 \section{Tecnologías utilizadas (Marco Teórico)}
 
 Como se ha mencionado anteriormente, uno de los objetivos de APRSINT es el de ser una solución accesible y fácil de usar. Para lograr este objetivo, se han seleccionado tecnologías ampliamente utilizadas y bien documentadas. A continuación se describen las tecnologías utilizadas en cada uno de los módulos de la aplicación.
-\subsection{Raspberry Pi}
+\subsection*{Raspberry Pi}
 
 La Raspberry Pi es un \textit{Single board computer (SBC)} u ordenador de placa única desarrollada por la Fundación Raspberry Pi. Las Raspberry pi son muy populares en el mundo de la informática y la electrónica por su bajo precio, reducido tamaño y su versatilidad.
 
@@ -27,13 +27,13 @@ La Raspberry Pi es un \textit{Single board computer (SBC)} u ordenador de placa 
 \end{itemize}
 Se ha seleccionado la Raspberry Pi 4B\footnote{Cuando se comenzó el proyecto todavía no se había lanzado la versión 5.} de 8GB de memoria RAM como plataforma de hardware para la implementación de la solución, debido a sus características y capacidades.
 
-\subsection{Disco duro ssd}
+\subsection*{Disco duro ssd}
 Los discos duros de estado sólido (SSD) son una alternativa a los discos duros tradicionales (HDD) que ofrecen una mayor velocidad de lectura y escritura, menor consumo energético y mayor durabilidad. Se ha seleccionado un disco duro SSD de 250GB que se haya conectado a la Raspberry-pi para almacenar el gran volumen de datos que consume y genera la aplicación a su velocidad y fiabilidad.
 
-\subsection{Python}
+\subsection*{Python}
 Python es un lenguaje de programación interpretado, de alto nivel y de propósito general. Es ampliamente utilizado en el desarrollo de aplicaciones web, científicas y de análisis de datos debido a su simplicidad, flexibilidad y facilidad de uso. Se ha seleccionado Python como lenguaje de programación principal para la implementación de la solución debido a la gran versatilidad que ofrece y sobre todo por la existencia de extensas librerías de visualización y manejo de grandes volúmenes de datos.
 
-\subsection{Dash}
+\subsection*{Dash}
 Dash es un framework de Python creado por Plotly para la creación de aplicaciones web interactivas y visualizaciones de datos. Dash permite crear aplicaciones web interactivas y visualizaciones de datos atractivas utilizando Python como lenguaje de programación. Dash esta construido encima de React Se ha seleccionado Dash como framework para la implementación de la interfaz web de la aplicación debido a su facilidad de uso y a la gran cantidad de funcionalidades que ofrece. Dash está escrito encima de Plotly.js, React y Flask lo que permite una gran capacidad de personalización.
 
 \begin{itemize}
@@ -44,7 +44,7 @@ Dash es un framework de Python creado por Plotly para la creación de aplicacion
 
 Para crear la aplicación web se consideraron algunas alternativas como Django, Streamlit y PowerBI, sin embargo, Dash fue la opción escogida debido a su extensa capacidad de personalización y personalización de la que carecían las demás opciones.
 
-\subsection{Cosmograph JS}
+\subsection*{Cosmograph JS}
 
 Cosmograph es una librería de JavaScript enfocada en la visualización de grandes grafos y redes complejas en aplicaciones web. Permite representar de manera interactiva relaciones entre entidades, facilitando la comprensión y el análisis de datos estructurados.
 
@@ -59,7 +59,7 @@ Cosmograph es una librería de JavaScript enfocada en la visualización de grand
 
 Después de una gran cantidad de pruebas y tras considerar muchas alternativas como Sigma-JS, CytoScape y networkx, se acabó eligiendo Cosmograph sobre todo por su rendimiento.
 
-\subsection{PostgreSQL}
+\subsection*{PostgreSQL}
 
 PostgreSQL es un sistema de gestión de bases de datos relacional de código abierto y potente, conocido por su fiabilidad, robustez y capacidad para manejar grandes volúmenes de datos. Ofrece una amplia gama de características avanzadas que lo hacen adecuado para aplicaciones web y empresariales exigentes.
 
@@ -73,7 +73,7 @@ PostgreSQL es un sistema de gestión de bases de datos relacional de código abi
 
 La elección de PostgreSQL como sistema de gestión de bases de datos se debió a su robustez, facilidad de uso y a la gran cantidad de funcionalidades que ofrece.
 
-\subsection{Sqlalchemy}
+\subsection*{Sqlalchemy}
 SQLAlchemy es una biblioteca de Python que facilita la interacción con bases de datos relacionales utilizando un enfoque orientado a objetos. Permite trabajar con diferentes motores de bases de datos, como PostgreSQL, MySQL, SQLite, entre otros, de una manera consistente y eficiente.
 
 \begin{itemize}
@@ -84,7 +84,7 @@ SQLAlchemy es una biblioteca de Python que facilita la interacción con bases de
 \end{itemize}
 
 La elección de SQLAlchemy se ha basado en su capacidad para mejorar el proceso de interacción con la base de datos. Permitiendo una estrecha integración entre la base de datos y la aplicación, permitiendo una flexibilidad muy grande a la hora de hacer consultas o inserciones y sobre todo creando una capa de seguridad para evitar ataques.
-\subsection{aprslib}
+\subsection*{aprslib}
 aprslib es una biblioteca de Python que facilita la interacción con el sistema APRS. Permite recibir y decodificar paquetes APRS, así como enviar paquetes APRS a través de la red APRS-IS.
 \begin{itemize}
 	\item \textbf{Recepción de Paquetes:} aprslib permite recibir paquetes APRS de la red APRS-IS de manera sencilla.
@@ -93,7 +93,7 @@ aprslib es una biblioteca de Python que facilita la interacción con el sistema 
 \end{itemize}
 Se ha elegido la librería aprslib por su facilidad de uso, su documentación y su capacidad para decodificar los paquetes APRS.
 
-\subsection{AWS}
+\subsection*{AWS}
 Amazon Web Services (AWS) es una plataforma de servicios en la nube ofrecida por Amazon. Proporciona servicios de infraestructura informática, almacenamiento, bases de datos, análisis e inteligencia artificial, entre otros.
 
 \begin{itemize}
@@ -105,7 +105,7 @@ Amazon Web Services (AWS) es una plataforma de servicios en la nube ofrecida por
 
 La elección de AWS así como los detalles de la implementación en la nube se describirán en la siguiente sección.
 
-\subsection{Supervisord}
+\subsection*{Supervisord}
 Supervisor es un sistema de control de procesos para sistemas operativos tipo Unix, diseñado para iniciar, detener y gestionar procesos de manera sencilla y robusta. Permite supervisar y mantener en funcionamiento aplicaciones y servicios, reiniciándolos automáticamente en caso de fallos o reinicios del sistema.
 
 \begin{itemize}
@@ -116,10 +116,10 @@ Supervisor es un sistema de control de procesos para sistemas operativos tipo Un
 
 Se ha seleccionado Supervidord como gestor de procesos gracias a su facilidad, flexibilidad (permitiendo ejecutar scripts de Python directamente) y robustez.
 
-\subsection{Pandas}
+\subsection*{Pandas}
 Pandas es la librería de facto de Python para el manejo y análisis de datos estructurados. Está escrita sobre Numpy (escrito en c) por lo que cuenta con muy buen rendimiento. Esta librería permite la lectura y escritura de datos en diferentes formatos, la manipulación de datos, la limpieza de datos y la creación de gráficos.
 
-\subsection{Conda}
+\subsection*{Conda}
 Conda es un gestor de paquetes, entornos y canales de código abierto que facilita la instalación y gestión de paquetes y dependencias en Python. Conda permite crear entornos virtuales aislados para proyectos específicos, lo que facilita la gestión de dependencias y la compatibilidad entre versiones de paquetes. Se ha seleccionado conda como gestor de paquetes para la instalación de las librerías y dependencias necesarias para la aplicación.
 
 \begin{itemize}
@@ -132,16 +132,16 @@ Conda es un gestor de paquetes, entornos y canales de código abierto que facili
 	\item \textbf{Flexibilidad:} Conda no se limita solo al ecosistema de Python. También puede gestionar paquetes de otros lenguajes de programación, como R, Java y C/C++. Esto lo convierte en una herramienta versátil para proyectos que involucran múltiples tecnologías.
 \end{itemize}
 
-\subsection{Click}
+\subsection*{Click}
 Click es una librería de Python que permite la creación de herramientas de línea de comandos de manera sencilla y eficiente. Click facilita la creación de interfaces de usuario basadas en texto, lo que permite a los usuarios interactuar con las aplicaciones a través de la terminal. Se muestra un ejemplo de uso de Click en la \Cref{fig:click-example}.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/click_help.png}
-	\caption{Ejemplo de uso de Click.}
+	\caption[Ejemplo de uso de Click.]{Ejemplo de uso de Click (elaboración propia).}
 	\label{fig:click-example}
 \end{figure}
 
-\subsection{Apache Airflow}
+\subsection*{Apache Airflow}
 Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo. Es similar a Cron de Unix, pero permite una mayor personalización y control de las tareas que ejecuta. Las tareas se definen en archivos separados facilitando la compartimentalización y ofreciendo una mayor robustez y escalabilidad.
 \begin{itemize}
 	\item \textbf{Orquestación de Flujos de Trabajo:} Airflow facilita la orquestación de flujos de trabajo complejos al permitir definir tareas y sus dependencias como DAG's, lo que proporciona una visión clara de la lógica de ejecución.
@@ -150,7 +150,7 @@ Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo.
 	\item \textbf{Extensibilidad:} Airflow es altamente extensible y permite integrar fácilmente con otros sistemas y herramientas, lo que permite construir flujos de trabajo personalizados que se adapten a las necesidades específicas del proyecto.
 \end{itemize}
 
-\subsection{Configuración del proyecto}
+\subsection*{Configuración del proyecto}
 
 Para la configuración del proyecto se ha utilizado un entorno virtual de conda. Se ha creado un entorno virtual con las librerías necesarias para la ejecución de la aplicación. Algunas de las librerías más importantes que se han utilizado son las siguientes:
 
@@ -171,18 +171,18 @@ $$pip\ install\ -i\ .$$
 \section{Adquisición de datos}
 En esta sección se describirá con detalle el módulo de adquisición de datos de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
 
-\subsection{RTL-SDR}
+\subsection*{RTL-SDR}
 En la primera fase del proyecto se compró un dongle RTL-SDR con el fin de recibir los paquetes APRS y procesarlos a partir de ello. Estos dongles son relativamente baratos oscilando entre los 30 y 100 euros, se conectan mediante usb al ordenador y tienen en la parte superior un conector SMA para conectar una antena. La peculiaridad de estos dispositivos reside en que son controlables mediante software y se pueden sintonizar en un rango de frecuencias muy amplio (24MHz a 1.7GHz).
 
 Para hacer uso de estos dispositivos se ha de usar software como GQRX, CubicSDR o SDRSharp. Es posible también usar rtl-sdr en la terminal creando posteriormente un micrófono virtual para que el software de análisis pueda decodificar los paquetes.
 
 Tras multitud de pruebas fallidas con distintos software de visualización y análisis y software de audio como Direwolf, se decidió no continuar por ese camino y probar otras alternativas como la que finalmente se ha implementado el \textbf{APRS-IS}
 
-\subsection{APRS-IS}
+\subsection*{APRS-IS}
 APRS-IS es un sistema que permite la transmisión de mensajes APRS por la red de Internet. La ventaja que ofrece este sistema frente al de recopilar información mediante una antena es que APRS-IS, permite obtener un flujo de datos mucho mayor, ya que hay una gran cantidad de antenas y otra ventaja con la que cuenta es que no está restringido al área que puede recibir la pequeña antena rtl-sdr sino a todo el mundo.
 
 
-\subsubsection{Infraestructura de la red APRS-IS}
+\subsubsection*{Infraestructura de la red APRS-IS}
 Componentes principales:
 \begin{itemize}
 	\item \textbf{Trackers o TNC:} Son los emisores de los paquetes APRS, suelen corresponder a estaciones fijas o móviles que envían por radio los paquetes con información de posición, velocidad, rumbo, etc.
@@ -197,13 +197,40 @@ Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/aprs_infra.png}
-	\caption{Infraestructura de la red APRS - APRS-IS.}
+	\caption[Infraestructura de la red APRS - APRS-IS.]{Infraestructura de la red APRS - APRS-IS (elaboración propia).}
 	\label{fig:aprs-infra}
 \end{figure}
 
 Se ha seleccionado APRS-IS como fuente de datos para la aplicación debido a su facilidad de uso, su disponibilidad y la gran cantidad de información que ofrece.
 
-\subsection{Recepción de paquetes APRS}
+\subsection*{La trama APRS}
+El sistema APRS utiliza tramas AX.25 para la transmisión de datos a través de las ondas de radio. Estas tramas contienen información sobre posición, velocidad, dirección y otros datos emitidos por estaciones de radioaficionados, objetos móviles y estaciones fijas.
+
+\subsubsection*{Formato de la Trama AX.25}
+
+Como se muestra en la \Cref{fig:aprs-frame} se puede ver que .
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{Imagenes/Chapter_4/AX.25Frame.png}
+	\caption[Formato de trama AX.25.]{Formato de trama AX.25 (elaboración propia).}
+	\label{fig:aprs-frame}
+\end{figure}
+
+\subsubsection*{Contenido de la Trama}
+
+Dentro del campo de información de una trama AX.25, se pueden incluir diversos datos relevantes para APRS. Esto puede incluir información de posición (latitud y longitud), velocidad, altitud, rumbo, comentarios del operador, mensajes de texto, etc.
+
+\[\underbrace{\textbf{\textcolor{red}{NOCALL}}}_{Origen} : \underbrace{\textbf{\textcolor[HTML]{FA9F42}{APRS}}}_{Destino}, \underbrace{\textbf{\textcolor{blue}{OH7RDA, OH7RDB}}}_{Digipeaters\ y\ I-Gates} : \underbrace{\textbf{\textcolor{green}{!4903N\/07201W-Test \/A=001234}}}_{Campo\ datos}\]
+
+\subsubsection*{Uso en APRS}
+
+En el contexto de APRS, las tramas AX.25 se utilizan para transmitir actualizaciones de posición de estaciones móviles, estaciones meteorológicas, balizas y otros objetos de interés. Estas tramas son recibidas por otras estaciones en la red APRS, lo que permite el seguimiento en tiempo real de la ubicación y otros datos de interés.
+
+
+
+
+\subsection*{Recepción de paquetes APRS}
 
 Para la recepción de paquetes APRS se ha utilizado la librería aprslib de Python. Esta librería permite conectarse a un servidor APRS-IS y recibir los paquetes APRS en tiempo real. Se ha creado un sistema que utilizando esta librería se conecta a un servidor APRS-IS, recibe los paquetes APRS y los guarda en un buffer en memoria. Cuando el buffer se llena con aproximadamente 10.000 mensajes en aproximadamente 15 segundos, se procede a escribir el buffer en un fichero comprimido en el disco duro SSD.
 
@@ -211,23 +238,27 @@ Una cosa curiosa es que los mensajes APRS no se decodifican en este punto, de he
 
 Es importante mencionar que el sistema de recepción de paquetes APRS se ejecuta en segundo plano en modo demonio utilizando el gestor de procesos Supervisord, lo que garantiza que el sistema se mantenga en funcionamiento incluso en caso de fallos o reinicios del sistema.
 
-\subsection{Procesado de paquetes APRS}
+\subsection*{Procesado de paquetes APRS}
 En esta sección se describirá con detalle el módulo de procesado de paquetes APRS de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
 
-\subsubsection{Subida de ficheros a AWS S3}
+\subsubsection*{Subida de ficheros a AWS S3}
 
 Una vez los ficheros se han guardado en el disco duro SSD, se procede a subirlos a un Bucket S3 en AWS. Para ello se ha utilizado la librería boto3 de Python, que permite interactuar con los servicios de AWS desde Python. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que sube los ficheros comprimidos al bucket S3. Una vez subidos los ficheros, se eliminan del disco duro SSD para liberar espacio. Cuando un fichero se sube sube a S3 se desencadena un evento
-\subsubsection{Procesado de paquetes APRS en AWS lambda}
+
+\subsubsection*{Procesado de paquetes APRS en AWS lambda}
+
 Una vez los ficheros se han subido a S3, se desencadena un evento que ejecuta una función lambda en AWS. Esta función lambda se encarga de descomprimir el fichero, procesar los mensajes APRS y convertirlos en formato JSON.
 
 Por defecto lambda no puede hacer uso de librerías de terceros por lo que se ha tenido que encapsular la librería aprslib en un fichero .zip, subirlo a lambda y establecerlo como una capa de lambda para poder hacer uso de ella.
 Para la descompresión de los ficheros se ha utilizado la librería gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip.
 Para el procesado de los mensajes APRS se ha utilizado la librería aprslib de Python como ya hemos mencionado, que permite decodificar los mensajes APRS y extraer información útil como la posición, velocidad y rumbo de los objetos rastreados en formato clave-valor.
+
 Esta función lambda se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
 Finalmente los mensajes procesados se guardan en un Bucket S3 de salida (aprsoutput) en formato JSON para su posterior descarga. La descarga de los ficheros JSON ocurre una vez al día mediante la orquestación de Apache Airflow y la librería boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la Raspberry pi.
 
 
-\subsection{Almacenamiento de paquetes APRS en la base de datos}
+\subsection*{Almacenamiento de paquetes APRS en la base de datos}
+
 Una vez los ficheros JSON ya procesados se han descargado al directorio temporal en la Raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la librería SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros JSON, procesa los mensajes APRS y los almacena en la base de datos.
 Este paso esconde un gran problema que hubo de ser solucionado. El script en un principio seguía los siguientes pasos.
 
@@ -241,7 +272,7 @@ Este paso esconde un gran problema que hubo de ser solucionado. El script en un 
 
 Este enfoque resultó tener varios problemas. El primero y más importante era el de rendimiento, ya que cada archivo JSON contenía alrededor de 10000 mensajes y en la creación de los objetos, inserciones en la BD y detección del país se tardaba alrededor de 40 segundos por fichero JSON. Esto aunque no parezca demasiado tiempo, si se tiene en cuenta que la cantidad de mensajes APRS que se reciben en 40 segundos es alrededor de 45000 mensajes, se puede ver que el sistema no era escalable.
 
-\subsubsection{\underline{Optimizaciones}}
+\subsubsection*{\underline{Optimizaciones}}
 Para solucionar este problema se realizaron las siguientes optimizaciones:
 \begin{itemize}
 	\item \textbf{Uso de sets:} Se ha cambiado el uso de consultas a la BD por sets en la creación de las estaciones para acelerar la comprobación la existencia de una estación en la base de datos.
@@ -250,7 +281,7 @@ Para solucionar este problema se realizaron las siguientes optimizaciones:
 \end{itemize}
 Estas optimizaciones han permitido que el tiempo de procesado de un fichero JSON haya pasado de 40 segundos a unos 2 segundos, lo que ha permitido que el sistema sea escalable y pueda procesar grandes volúmenes de mensajes APRS de manera eficiente.
 
-\subsection{Base de datos}
+\subsection*{Base de datos}
 Como se ha mencionado previamente, se ha elegido PostgreSQL como sistema de gestión de bases de datos para la aplicación. Esta elección se ha basado en la robustez, la fiabilidad y la capacidad de manejar grandes volúmenes de datos que ofrece PostgreSQL incluso en sistemas con recursos reducidos. La base de datos se ha diseñado siguiendo un modelo relacional \Cref{fig:db-model} que permite almacenar y relacionar la información de los mensajes APRS de manera eficiente, el modelo cuenta con las siguientes tablas.
 
 \begin{itemize}
@@ -263,7 +294,7 @@ Como se ha mencionado previamente, se ha elegido PostgreSQL como sistema de gest
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/db_diagram.png}
-	\caption{Estructura de la base de datos.}
+	\caption[Estructura de la base de datos.]{Estructura de la base de datos (elaboración propia).}
 	\label{fig:db-model}
 \end{figure}
 
@@ -271,7 +302,7 @@ Como se ha mencionado previamente, se ha elegido PostgreSQL como sistema de gest
 
 En esta sección se describirá con detalle el módulo de visualización y presentación de datos de la aplicación, incluyendo la arquitectura, los componentes y las tecnologías utilizadas.
 
-\subsection{Dash}
+\subsection*{Dash}
 Dash es un framework de Python creado por Plotly para la creación de aplicaciones web interactivas y visualizaciones de datos. Dash permite crear aplicaciones web interactivas y visualizaciones de datos atractivas utilizando Python como lenguaje de programación. Dash está escrito encima de Plotly.js, React y Flask lo que permite una gran capacidad de personalización.
 
 Dash ofrece una versión de pago llamada Dash Enterprise que ofrece una gran cantidad de funcionalidades para elaborar aplicaciones web de manera más rápida y sencilla. Sin embargo, para este proyecto se ha utilizado la versión gratuita de Dash, con algunas librerías adicionales entre las que se encuentran:
@@ -284,33 +315,33 @@ Dash ofrece una versión de pago llamada Dash Enterprise que ofrece una gran can
 	\item \textbf{Plotly Express:} Es el principal competidor de matplotlib en el mundo de la visualización de datos en Python. Ofrece una gran cantidad de gráficos y visualizaciones de datos interactivos.
 \end{itemize}
 
-\subsection{Diseño}
+\subsection*{Diseño}
 El diseño de la aplicación web se ha basado en la simplicidad, la usabilidad y la accesibilidad. El primer diseño del proyecto se realizó en la aplicación de prototipado Figma como se muestra en la \Cref{fig:figma}.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.6\textwidth]{Imagenes/Chapter_4/first_draft.png}
-	\caption{Primer diseño de la aplicación web en Figma.}
+	\caption[Primer diseño de la aplicación web en Figma.]{Primer diseño de la aplicación web en Figma (elaboración propia).}
 	\label{fig:figma}
 \end{figure}
 
 Este diseño se ha ido modificando y adaptando a lo largo del desarrollo del proyecto para mejorar la usabilidad y la experiencia del usuario. Este diseño muestra la pantalla principal de la aplicación, que incluye un mapa con las estaciones APRS, y un panel de control con filtros y opciones de visualización.
 
-\subsection{Home - Primera pantalla}
+\subsection*{Home - Primera pantalla}
 En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización.
-\subsubsection{Obtención de datos}
+\subsubsection*{Obtención de datos}
 
 Siguiendo la estrategia de otros sistemas de dashboarding como PowerBI o Tableau y con el objetivo de mejorar la eficiencia y la escalabilidad del sistema, se ha optado por eliminar en lo posible las consultas a la base de datos en tiempo real. Para ello se ha creado un sistema de caché que almacena los datos a representar en esta pantalla en un archivo de rápida lectura que es actualizado diariamente mediante Apache Airflow. Este sistema de caché permite reducir la carga en la base de datos y mejorar el rendimiento de la aplicación web.
 
 El sistema de caché se ha implementado utilizando la librería Pandas de Python, usando un fichero .feather para almacenar los datos en formato binario y comprimido y reducir dramáticamente\footnote{Los ficheros de tipo .feather son hasta 100 veces más rápidos que los ficheros .csv} el tiempo de carga de la página.
 
-\subsubsection{Mapa de estaciones APRS}
+\subsubsection*{Mapa de estaciones APRS}
 
 El mapa de estaciones APRS muestra la posición de cada una de las estaciones APRS, representadas por un marcador en el mapa. Es un mapa interactivo que permite hacer zoom, desplazarse y al posicionar el cursor encima de una estación aparecerá un recuadro ofreciendo información adicional.
 
 Esta página hace uso de la librería Plotly para renderizar el mapa y del servicio web de mapas Mapbox para obtener los mapas y estilos de mapa.
 
-\subsubsection{Filtros}
+\subsubsection*{Filtros}
 El panel de control de la aplicación web incluye una serie de filtros y opciones de visualización que permiten al usuario personalizar la información mostrada en el mapa. La ventaja de estos filtros es que son aditivos y se pueden combinar para obtener con exactitud la información requerida. Los filtros disponibles son:
 
 \begin{itemize}
@@ -321,7 +352,7 @@ El panel de control de la aplicación web incluye una serie de filtros y opcione
 	\item \textbf{Filtro por ssid:} Permite filtrar las estaciones por ssid.
 \end{itemize}
 
-\subsubsection{Búsqueda difusa en contenido de mensajes}
+\subsubsection*{Búsqueda difusa en contenido de mensajes}
 Este filtro es personalmente el más interesante de todos los filtros disponibles. El objetivo es permitir al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase especifica. Para ello se han probado varias alternativas como el uso de expresiones regulares o una implementación en Python puro. El problema de estas opciones es que son muy lentas para el enorme volumen de datos con el que se cuenta y al ser dinámico no era factible realizar esa búsqueda en tiempo real.
 
 Finalmente se ha optado por el uso de Postgresql FTS (Full Text Search). Postgres FTS es un sistema de búsqueda de texto completo que permite realizar búsquedas de texto en grandes volúmenes de datos de manera eficiente. Las ventajas que ofrece este sistema son:
@@ -337,19 +368,21 @@ Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal c
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{Imagenes/Chapter_4/fts_output.png}
-	\caption{Resultados de la búsqueda de <<emergency hospital>>.}
+	\caption[Resultados de la búsqueda de <<emergency hospital>>.]{Resultados de la búsqueda de <<emergency hospital>> (elaboración propia).}
 	\label{fig:postgres-fts}
 \end{figure}
 
 En el modal se muestra una tabla de dos columnas, la columna izquierda contiene un boton con el nombre de la estación y la columna derecha el contenido del mensaje.
 
-\subsection{Station - Segunda pantalla}
+\subsection*{Station - Segunda pantalla}
 Esta es la página que hace única a APRSINT. En esta página se muestra la información detallada de una estación APRS en concreto. Se puede llegar a esta pantalla desde la página principal haciendo clic en un marcador de una estación en el mapa, haciendo clic en una estación en la búsqueda en los mensajes o haciendo clic en un nodo del grafo de la página 3. La pantalla station está dividida en tres secciones.
 
-\subsubsection{Información de QRZ}
-QRZ es una base de datos de radioaficionados que contiene información detallada sobre los radioaficionados de todo el mundo. Para acceder a la información disponible en la web \url{qrz.com} es necesario tener una cuenta y estar registrado. QRZ cuenta con un servicio de API que permite acceder a la información de los radioaficionados de manera programática. Para mantener APRSINT fiel a los principios del OSINT (fuentes abiertas) se ha optado por no utilizar la API e intentar otra opción.
+\subsubsection*{Información de QRZ}
+QRZ es una base de datos de radioaficionados que contiene información detallada sobre los radioaficionados de todo el mundo. Para acceder a la información disponible en la web de QRZ \footnote{\url{qrz.com}} es necesario tener una cuenta y estar registrado. QRZ cuenta con un servicio de API que permite acceder a la información de los radioaficionados de manera programática.
 
-Utilizando una cuenta normal gratuita en QRZ, se permiten realizar hasta 25 visualizaciones de perfiles diarias en su sitio web. Con el objetivo de aumentar la cantidad de visualizaciones disponibles, se ha optado por implementar web scraping mediante un sistema propio de rotación de cuentas gratuitas y utilizando la librería \textit{BeautifulSoup}. Como parte de esta estrategia, se ha creado una tabla en la base de datos para almacenar en caché las solicitudes, lo que reduce el número de solicitudes a una misma estación si esta ya ha sido consultada previamente.
+Para obtener la información de los radioaficionados se ha utilizado la librería requests de Python, que permite obtener la información necesaria de QRZ.
+
+Con el fin de acelerar las consultas, se ha implementado una tabla en la base de datos para almacenar en caché las solicitudes, lo que disminuye la cantidad de consultas a una estación determinada si esta ya ha sido solicitada con anterioridad.
 
 Este módulo es de los más complejos de la aplicación, pero a su vez de los más útiles, ya que permite al usuario obtener información muy detallada de una estación APRS en concreto y de la persona que está detrás. Algunos de los datos que se pueden obtener son:
 
@@ -361,12 +394,12 @@ Este módulo es de los más complejos de la aplicación, pero a su vez de los m�
 	\item Fecha de nacimiento de la persona registrada
 \end{itemize}
 
-\subsubsection{Información de posiciones}
+\subsubsection*{Información de posiciones}
 Esta sección se compone de dos partes. En la parte superior se muestra un mapa con todas las posiciones reportadas por la estación, se muestra también la caja delimitadora de todas las posiciones.
 
 En la parte inferior se muestran estadísticas de las posiciones reportadas por la estación como la frecuencia media de emisión, la primera y última emisión recibida y por cada mensaje emitido por la estación se muestra el número de repeticiones del mensaje y las urls (si existen) encontradas en los mensajes.
 
-\subsubsection{Información de mensajes}
+\subsubsection*{Información de mensajes}
 Finalmente encontramos la sección de mensajes. En esta sección se muestra una tabla en la que se muestra la información de los mensajes emitidos por la estación. La tabla se compone de las siguientes columnas:
 \begin{itemize}
 	\item La fecha de emisión del mensaje.
@@ -379,13 +412,13 @@ Finalmente encontramos la sección de mensajes. En esta sección se muestra una 
 
 La tabla es interactiva y permite al usuario filtrar los mensajes por el intervalo de fechas que pretenda.
 
-\subsection{Graph - Tercera pantalla}
+\subsection*{Graph - Tercera pantalla}
 Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en el que los nodos son las estaciones y las aristas dirigidas, mensajes como se muestra en la \Cref{fig:graph}. El grafo es interactivo y permite hacer zoom, desplazarse y al posicionar el cursor encima de un nodo o arista aparecerá un recuadro ofreciendo información adicional. El color y tamaño de los nodos depende de la cantidad de mensajes que ha emitido o recibido la estación y de misma manera el color y tamaño de las aristas depende de la cantidad de mensajes que se han emitido o recibido desde la estación origen y destino.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\textwidth]{Imagenes/Chapter_4/graph.png}
-	\caption{Grafo de estaciones APRS.}
+	\caption[Grafo de estaciones APRS.]{Grafo de estaciones APRS (elaboración propia).}
 	\label{fig:graph}
 \end{figure}
 
@@ -397,14 +430,14 @@ Las características que se buscaban en la solución final eran:
 	\item \textbf{Personalización:} Se buscaba un grafo que permitiera personalizar la apariencia y el comportamiento de los nodos y aristas según las características de cada estación y mensaje.
 \end{itemize}
 Para alcanzar la solución final que se presenta ahora en la página, se han probado muchas opciones que se han ido descartando por diferentes motivos.
-\subsubsection{Alternativas probadas}
+\subsubsection*{Alternativas probadas}
 En un primer momento se intentó utilizar la librería \textbf{networkx} de Python para la creación del grafo, sin embargo, se descartó debido a su rendimiento y a su falta de interactividad. Posteriormente se intentó utilizar la librería \textbf{Cytoscape} que es la solución por defecto que ofrece Dash, esta ofrece una gran cantidad de funcionalidades para la creación de grafos interactivos, sin embargo, se descartó de nuevo debido a su pobre rendimiento.
 
 Una de las alternativas que también se probó fue la librería \textbf{Sigma JS} que ofrece una gran cantidad de funcionalidades y personalización para la creación de grafos interactivos. Esta librería cuenta con una funcionalidad interesante \textit{forceAtlas2} que permite calcular mediante una simulación de fuerzas la posición de los nodos y aristas en el grafo. Sin embargo, de nuevo se descartó debido a su rendimiento con una gran cantidad de nodos y aristas.
 
 Finalmente se optó por la librería \textbf{Cosmograph JS}. Cosmograph utiliza la librería \textit{cosmos} de cálculo de posiciones mediante la GPU y por tanto puede manejar un gran número de nodos y aristas.
 
-\subsubsection{El grafo}
+\subsubsection*{El grafo}
 El problema principal con Cosmograph ha sido la falta de documentación debido a que es bastante nueva y la dificultad de integrarla con Dash. Esta librería está publicada en npm (el repositorio de librerias de JavaScript) y se ha tenido que utilizar bundle.js para convertir el código de JavaScript en un solo fichero que se pueda importar en Dash. Ha sido necesario modificar ligeramente la librería para terminar de integrarla con Dash.
 
 Se han utilizado tres componentes de Cosmograph JS para la creación del grafo, el componente \textit{Cosmograph} que crea el grafo, el componente \textit{CosmographSearch} que permite mediante una barra de búsqueda encontrar una estación y el componente \textit{CosmographTimeline} que permite filtrar el grafo por rango de fechas.
@@ -417,7 +450,7 @@ Cuando el usuario arrastra el cursor sobre un nodo, se muestra un recuadro con e
 
 En esta sección se describirá con detalle la metodología de orquestación de tareas y flujos de trabajo de la aplicación que se han ido comentando a lo largo del capítulo.
 
-\subsection{Supervisord}
+\subsection*{Supervisord}
 Supervisord es un sistema de control de procesos para sistemas operativos tipo Unix, diseñado para iniciar, detener y gestionar procesos de manera sencilla y robusta.
 
 Se ha utilizado Supervisord como gestor de procesos para ejecutar en modo demonio como se ha mencionado previamente el sistema de recepción de paquetes APRS. Se ha establecido en la configuración de Supervisord que el sistema de recepción de paquetes se ejecute en el arranque del sistema y siempre después de que la interfaz de red esté disponible. En caso de fallo del sistema de recepción, Supervisord reiniciará el sistema y registrará la causa del fallo.
@@ -457,7 +490,7 @@ Se presenta en la \Cref{fig:airflow-dashboard} la interfaz de Apache Airflow con
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{Imagenes/Chapter_4/airflow_dashboard.png}
-	\caption{Interfaz de Apache Airflow.}
+	\caption[Interfaz de Apache Airflow.]{Interfaz de Apache Airflow (elaboración propia).}
 	\label{fig:airflow-dashboard}
 \end{figure}
 
@@ -474,19 +507,19 @@ Se ha configurado también la redirección de puertos en el router para permitir
 	\item \textbf{Servidor SSH:} Se ha configurado un servidor SSH para permitir el acceso remoto a la Raspberry Pi y realizar todo el desarrollo.
 \end{itemize}
 
-\subsection{Servidor Web}
+\subsection*{Servidor Web}
 
 En esta sección se describe la arquitectura del servidor web que aloja la aplicación Dash utilizando Flask como backend, junto con Gunicorn y Nginx como reverse proxy.
 
-\subsubsection{Flask}
+\subsubsection*{Flask}
 
 Flask es un framework web ligero para Python que proporciona herramientas para crear aplicaciones web de forma rápida y sencilla. En esta aplicación, Flask se utiliza como el framework backend para la aplicación de Dash. Proporciona las rutas y la lógica de negocio necesarias para la aplicación.
 
-\subsubsection{Gunicorn}
+\subsubsection*{Gunicorn}
 
 Gunicorn es un servidor HTTP WSGI (Web Server Gateway Interface) para Python. Se utiliza para servir la aplicación Flask de forma eficiente y escalable. Gunicorn gestiona múltiples procesos de forma paralela, lo que mejora el rendimiento de la aplicación. Para APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un socket UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
 
-\subsubsection{Nginx}
+\subsubsection*{Nginx}
 
 Nginx es un servidor web de código abierto que en este caso se ha utilizado como proxy inverso. Actúa como intermediario entre los clientes y el servidor Flask/Gunicorn. Nginx se encarga de recibir las solicitudes HTTP, dirigirlas al servidor Gunicorn y devolver las respuestas a los clientes. Nginx maneja tareas como el balanceo de carga, el almacenamiento en caché la compresión de archivos y la seguridad.
 
@@ -494,13 +527,13 @@ Nginx es un servidor web de código abierto que en este caso se ha utilizado com
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.9\textwidth]{Imagenes/Chapter_4/web_server.png}
-	\caption{Arquitectura del servidor web de APRSINT.}
+	\caption[Arquitectura del servidor web de APRSINT.]{Arquitectura del servidor web de APRSINT (elaboración propia).}
 	\label{fig:web-server}
 \end{figure}
 
-El diagrama de la arquitectura del servidor web se muestra en la Figura \Cref{fig:web-server}. Como se puede observar, la solicitud HTTP del cliente pasa a través de Nginx, que actúa como un proxy inverso y la reenvía a Gunicorn, donde se ejecuta la aplicación Flask. Una vez que Flask procesa la solicitud, la respuesta se envía de vuelta al cliente a través de Nginx.
+El diagrama de la arquitectura del servidor web se muestra en la \Cref{fig:web-server}. Como se puede observar, la solicitud HTTP del cliente pasa a través de Nginx, que actúa como un proxy inverso y la reenvía a Gunicorn, donde se ejecuta la aplicación Flask. Una vez que Flask procesa la solicitud, la respuesta se envía de vuelta al cliente a través de Nginx.
 
-\subsubsection{Flujo de una petición HTTP}
+\subsubsection*{Flujo de una petición HTTP}
 
 A continuación se describe cómo se maneja una solicitud HTTP desde se recibe en Nginx hasta que se envía la respuesta de vuelta al cliente. A continuación se detalla el proceso paso a paso:
 
@@ -517,7 +550,7 @@ A continuación se describe cómo se maneja una solicitud HTTP desde se recibe e
 
 Este proceso asegura que las solicitudes sean manejadas de manera eficiente y escalable, garantizando una experienci de navegación más fluida.
 
-\subsection{Protección ante ataques}
+\subsection*{Protección ante ataques}
 
 Para todo el desarrollo de la aplicación se ha utilizado el protocolo ssh.
 Se han ampliado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados.
