@@ -1,4 +1,50 @@
-\begin{thebibliography}{0}
+\begin{thebibliography}{7}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+
+\bibitem[{{Bob Bruninga}(1999)}]{APRSOrigins}
+{\sc {Bob Bruninga}}.
+\newblock Articles.txt.
+\newblock Informe t\'ecnico, 1999.
+\newblock Accedido: 05-01-2023.
+
+\bibitem[{{Hessu}(2020)}]{APRSPaths}
+{\sc {Hessu}}.
+\newblock How aprs paths work.
+\newblock \url{https://blog.aprs.fi/2020/02/how-aprs-paths-work.html}, 2020.
+\newblock Accedido: 28-04-2024.
+
+\bibitem[{{Justin Ellingwood, Kathleen Juell}()}]{WebServer}
+{\sc {Justin Ellingwood, Kathleen Juell}}.
+\newblock How to serve flask applications with gunicorn and nginx on ubuntu
+  18.04.
+\newblock
+  \url{https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04},
+  ????
+\newblock Accedido: 06-05-2024.
+
+\bibitem[{{Mario}(2024)}]{QueEsAPRS}
+{\sc {Mario}}.
+\newblock Que es y cómo funciona el sistema aprs.
+\newblock \url{https://crecj.org/que-es-y-como-funciona-el-sistema-aprs}, 2024.
+\newblock Accedido: 02-02-2024.
+
+\bibitem[{{Patrick Fromaget}()}]{RpiSecure}
+{\sc {Patrick Fromaget}}.
+\newblock Que es y cómo funciona el sistema aprs.
+\newblock \url{https://raspberrytips.com/security-tips-raspberry-pi/}, ????
+\newblock Accedido: 17-03-2024.
+
+\bibitem[{{The APRS Working Group}(2000)}]{APRSProtocol}
+{\sc {The APRS Working Group}}.
+\newblock Automatic position reporting system aprs protocol reference protocol
+  version 1.0.
+\newblock Informe t\'ecnico, 2000.
+\newblock Accedido: 05-01-2024.
+
+\bibitem[{{Wikipedia}(2024)}]{APRS}
+{\sc {Wikipedia}}.
+\newblock Aprs.
+\newblock \url{https://en.wikipedia.org/wiki/APRS}, 2024.
+\newblock Accedido: 12-11-2024.
 
 \end{thebibliography}

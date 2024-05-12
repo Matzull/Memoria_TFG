@@ -204,31 +204,41 @@ Se muestra el flujo de datos de la red APRS-IS en la \Cref{fig:aprs-infra}.
 Se ha seleccionado APRS-IS como fuente de datos para la aplicación debido a su facilidad de uso, su disponibilidad y la gran cantidad de información que ofrece.
 
 \subsection*{La trama APRS}
-El sistema APRS utiliza tramas AX.25 para la transmisión de datos a través de las ondas de radio. Estas tramas contienen información sobre posición, velocidad, dirección y otros datos emitidos por estaciones de radioaficionados, objetos móviles y estaciones fijas.
+El sistema APRS utiliza tramas AX.25 (Amateur X.25) para la transmisión de datos a través de las ondas de radio. El protocolo X.25 es un protocolo de nivel de enlace de datos que se diseñó y se creó para redes de conmutación de paquetes. El protocolo AX.25 es una versión simplificada del protocolo X.25 que se utiliza en las redes de radioaficionados.
 
-\subsubsection*{Formato de la Trama AX.25}
+\subsubsection*{Formato de la Trama APRS}
 
-Como se muestra en la \Cref{fig:aprs-frame} se puede ver que .
+Todos los paquetes APRS se envían utilizando tramas \textbf{no numeradas} a diferencia de otros protocolos como TCP que utilizan tramas numeradas. Se muestra un ejemplo de trama APRS en la \Cref{fig:aprs-frame}.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=1\textwidth]{Imagenes/Chapter_4/AX.25Frame.png}
-	\caption[Formato de trama AX.25.]{Formato de trama AX.25 (elaboración propia).}
+	\caption[Formato de trama AX.25.]{Formato de trama AX.25 (elaboración propia, \cite{APRSProtocol}).}
 	\label{fig:aprs-frame}
 \end{figure}
 
+Una trama AX.25 consta de los siguientes campos:
+\begin{itemize}
+	\item \textbf{Flag:} Marca el inicio y el final de la trama. Tiene un valor fijo de 0x7E.
+	\item \textbf{Destino:} Identifica la estación de destino de la trama. Puede ser una dirección de estación completa o una dirección abreviada.
+	\item \textbf{Origen:} Identifica la estación de origen de la trama. Puede ser una dirección de estación completa o una dirección abreviada.
+	\item \textbf{Dirección de Digipeater (0-8):} Identifica los repetidores que deben reenviar la trama. Puede haber hasta 8 repetidores en la ruta.
+	\item \textbf{Campo de control (UI):} Este campo se establece a 0x03 (trama no numerada).
+	\item \textbf{ID de protocolo:} Este campo se establece a 0xF0 (no hay protocolo de capa 3).
+	\item \textbf{Datos:} Este campo contiene los datos de la trama. En el caso de las tramas APRS, este campo puede contener información sobre la posición, la velocidad, el estado y otros datos de la estación.
+	\item \textbf{FCS:} Frame Check Sequence (FCS): Es un código de verificación de redundancia cíclico (CRC) que se utiliza comprobar la integridad de la trama.
+\end{itemize}
+
+
 \subsubsection*{Contenido de la Trama}
 
-Dentro del campo de información de una trama AX.25, se pueden incluir diversos datos relevantes para APRS. Esto puede incluir información de posición (latitud y longitud), velocidad, altitud, rumbo, comentarios del operador, mensajes de texto, etc.
+Dentro del campo de información de una trama AX.25, se pueden incluir diversos datos relevantes para APRS. Esto puede incluir información de posición (latitud y longitud), velocidad, altitud, rumbo, comentarios del operador, mensajes de texto, etc \cite{APRSPaths}.
 
-\[\underbrace{\textbf{\textcolor{red}{NOCALL}}}_{Origen} : \underbrace{\textbf{\textcolor[HTML]{FA9F42}{APRS}}}_{Destino}, \underbrace{\textbf{\textcolor{blue}{OH7RDA, OH7RDB}}}_{Digipeaters\ y\ I-Gates} : \underbrace{\textbf{\textcolor{green}{!4903N\/07201W-Test \/A=001234}}}_{Campo\ datos}\]
+\[\underbrace{\textbf{\textcolor{red}{NOCALL}}}_{Origen}:\underbrace{\textbf{\textcolor[HTML]{FA9F42}{APRS}}}_{Destino}, \underbrace{\textbf{\textcolor{blue}{OH7RDA, OH7RDB}}}_{Digipeaters\ y\ I-Gates}:\underbrace{\textbf{\textcolor{green}{!4903N07201W-Test A=001234}}}_{Campo\ datos}\]
 
 \subsubsection*{Uso en APRS}
 
 En el contexto de APRS, las tramas AX.25 se utilizan para transmitir actualizaciones de posición de estaciones móviles, estaciones meteorológicas, balizas y otros objetos de interés. Estas tramas son recibidas por otras estaciones en la red APRS, lo que permite el seguimiento en tiempo real de la ubicación y otros datos de interés.
-
-
-
 
 \subsection*{Recepción de paquetes APRS}
 
@@ -253,13 +263,23 @@ Por defecto lambda no puede hacer uso de librerías de terceros por lo que se ha
 Para la descompresión de los ficheros se ha utilizado la librería gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip.
 Para el procesado de los mensajes APRS se ha utilizado la librería aprslib de Python como ya hemos mencionado, que permite decodificar los mensajes APRS y extraer información útil como la posición, velocidad y rumbo de los objetos rastreados en formato clave-valor.
 
-Esta función lambda se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/lambda.png}
+	\caption[Procesado de paquetes APRS en AWS Lambda.]{Procesado de paquetes APRS en AWS Lambda (elaboración propia).}
+	\label{fig:aws-lambda}
+\end{figure}
+
+\noindent Esta función lambda \Cref{fig:aws-lambda} se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
+
 Finalmente los mensajes procesados se guardan en un Bucket S3 de salida (aprsoutput) en formato JSON para su posterior descarga. La descarga de los ficheros JSON ocurre una vez al día mediante la orquestación de Apache Airflow y la librería boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la Raspberry pi.
+
 
 
 \subsection*{Almacenamiento de paquetes APRS en la base de datos}
 
 Una vez los ficheros JSON ya procesados se han descargado al directorio temporal en la Raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la librería SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros JSON, procesa los mensajes APRS y los almacena en la base de datos.
+
 Este paso esconde un gran problema que hubo de ser solucionado. El script en un principio seguía los siguientes pasos.
 
 \begin{enumerate}
@@ -285,18 +305,33 @@ Estas optimizaciones han permitido que el tiempo de procesado de un fichero JSON
 Como se ha mencionado previamente, se ha elegido PostgreSQL como sistema de gestión de bases de datos para la aplicación. Esta elección se ha basado en la robustez, la fiabilidad y la capacidad de manejar grandes volúmenes de datos que ofrece PostgreSQL incluso en sistemas con recursos reducidos. La base de datos se ha diseñado siguiendo un modelo relacional \Cref{fig:db-model} que permite almacenar y relacionar la información de los mensajes APRS de manera eficiente, el modelo cuenta con las siguientes tablas.
 
 \begin{itemize}
-	\item \textbf{stations:} Almacena la información de las estaciones APRS, incluyendo el identificador (CALLSIGN), el ssid y su símbolo.
+	\item \textbf{stations:} Almacena la información de las estaciones APRS, incluyendo el identificador de la estación (CALLSIGN), el ssid y su símbolo en formato caracter.
 	\item \textbf{station\textunderscore locations:} Almacena la información de las posiciones \footnote[1]{Esta tabla tiene un campo id en la clave primaria por si una estación ha emitido un mensaje sin timestamp} de las estaciones APRS, incluyendo el país, la latitud, la longitud y la fecha y hora en la que se han recibido.
-	\item \textbf{messages:} Almacena la información de los mensajes APRS, incluyendo el contenido del mensaje, el tipo de mensaje y el timestamp.
+	\item \textbf{messages:} Almacena la información de los mensajes APRS, incluyendo el contenido del mensaje, el tipo de mensaje, el timestamp y el mensaje original retransmitido.
 	\item \textbf{qrz\textunderscore profiles:} Sirve como una caché que almacena la información de los perfiles de los usuarios de QRZ, incluyendo el identificador (CALLSIGN), el nombre, la dirección, la ciudad, el estado, el código postal, el país, la latitud, la longitud y la fecha de nacimiento entre muchos otros.
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[h]
 	\centering
-	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/db_diagram.png}
+	\includegraphics[width=0.95\textwidth]{Imagenes/Chapter_4/db_diagram.png}
 	\caption[Estructura de la base de datos.]{Estructura de la base de datos (elaboración propia).}
 	\label{fig:db-model}
 \end{figure}
+
+\FloatBarrier
+
+\subsection{Flujo de un paquete APRS}
+En esta sección se describirá con detalle el flujo de un paquete APRS a través de la aplicación, desde la recepción hasta el almacenamiento en la base de datos.
+\begin{enumerate}
+	\item \textbf{Recepción:} El paquete APRS se recibe a través de la red APRS-IS y se almacena en un buffer en memoria.
+	\item \textbf{Almacenamiento en disco:} Cuando el buffer se llena con aproximadamente 10.000 mensajes, se escribe el buffer en un fichero comprimido en el disco duro SSD.
+	\item \textbf{Subida a S3:} El fichero comprimido se sube a un Bucket S3 en AWS para su procesamiento posterior.
+	\item \textbf{Procesado en Lambda:} Una función lambda en AWS descomprime el fichero, procesa los mensajes APRS y los convierte en formato JSON.
+	\item \textbf{Almacenamiento en S3:} Los ficheros JSON procesados se guardan en un Bucket S3 de salida para su posterior descarga.
+	\item \textbf{Descarga a la Raspberry pi:} Una vez al día, los ficheros JSON se descargan a una carpeta temporal en la Raspberry pi.
+	\item \textbf{Almacenamiento en la base de datos:} Un script en la Raspberry pi lee los ficheros JSON, procesa los mensajes APRS y los almacena en la base de datos PostgreSQL.
+\end{enumerate}
+
 
 \section{Visualización y Presentación de datos}
 
@@ -311,7 +346,7 @@ Dash ofrece una versión de pago llamada Dash Enterprise que ofrece una gran can
 	\item \textbf{Dash Core Components:} Ofrece una amplia gama de componentes interactivos como gráficos, tablas, sliders, dropdowns, entre otros, que permiten a los usuarios interactuar con los datos de manera intuitiva.
 	\item \textbf{Dash HTML Components:} Ofrece una amplia gama de componentes HTML como divs, spans, inputs, entre otros, que permiten personalizar la apariencia y el diseño de la aplicación web.
 	\item \textbf{Dash Mantine Components:} Ofrece una amplia gama de componentes de Mantine como navbars, tarjetas, modales, entre otros, que permiten crear aplicaciones web atractivas y responsivas.
-	\item \textbf{Dash Express:} Ofrece componentes extra como un panel de filtrado y una barra de navegación. \footnote{Esta librería se ha modificado para adaptarla a las necesidades del proyecto.}
+	\item \textbf{Dash Express:} Ofrece componentes extra como un panel de filtrado y una barra de navegación \footnote{Esta librería se ha modificado para adaptarla a las necesidades del proyecto.}.
 	\item \textbf{Plotly Express:} Es el principal competidor de matplotlib en el mundo de la visualización de datos en Python. Ofrece una gran cantidad de gráficos y visualizaciones de datos interactivos.
 \end{itemize}
 
@@ -320,7 +355,7 @@ El diseño de la aplicación web se ha basado en la simplicidad, la usabilidad y
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.6\textwidth]{Imagenes/Chapter_4/first_draft.png}
+	\includegraphics[width=0.85\textwidth]{Imagenes/Chapter_4/first_draft.png}
 	\caption[Primer diseño de la aplicación web en Figma.]{Primer diseño de la aplicación web en Figma (elaboración propia).}
 	\label{fig:figma}
 \end{figure}
@@ -329,11 +364,12 @@ Este diseño se ha ido modificando y adaptando a lo largo del desarrollo del pro
 
 \subsection*{Home - Primera pantalla}
 En esta sección se describirá la primera pantalla de la aplicación web, que muestra un mapa con las estaciones APRS y un panel de control con filtros y opciones de visualización.
+
 \subsubsection*{Obtención de datos}
 
 Siguiendo la estrategia de otros sistemas de dashboarding como PowerBI o Tableau y con el objetivo de mejorar la eficiencia y la escalabilidad del sistema, se ha optado por eliminar en lo posible las consultas a la base de datos en tiempo real. Para ello se ha creado un sistema de caché que almacena los datos a representar en esta pantalla en un archivo de rápida lectura que es actualizado diariamente mediante Apache Airflow. Este sistema de caché permite reducir la carga en la base de datos y mejorar el rendimiento de la aplicación web.
 
-El sistema de caché se ha implementado utilizando la librería Pandas de Python, usando un fichero .feather para almacenar los datos en formato binario y comprimido y reducir dramáticamente\footnote{Los ficheros de tipo .feather son hasta 100 veces más rápidos que los ficheros .csv} el tiempo de carga de la página.
+El sistema de caché se ha implementado utilizando la librería Pandas de Python, usando un fichero .feather para almacenar los datos en formato binario y comprimido y reducir dramáticamente\footnote{Los ficheros de tipo .feather son hasta 100 veces más rápidos en lectura y escritura que los ficheros .csv} el tiempo de carga de la página.
 
 \subsubsection*{Mapa de estaciones APRS}
 
@@ -372,7 +408,7 @@ Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal c
 	\label{fig:postgres-fts}
 \end{figure}
 
-En el modal se muestra una tabla de dos columnas, la columna izquierda contiene un boton con el nombre de la estación y la columna derecha el contenido del mensaje.
+\noindent En el modal se muestra una tabla de dos columnas, la columna izquierda contiene un botón con el nombre de la estación y la columna derecha el contenido del mensaje.
 
 \subsection*{Station - Segunda pantalla}
 Esta es la página que hace única a APRSINT. En esta página se muestra la información detallada de una estación APRS en concreto. Se puede llegar a esta pantalla desde la página principal haciendo clic en un marcador de una estación en el mapa, haciendo clic en una estación en la búsqueda en los mensajes o haciendo clic en un nodo del grafo de la página 3. La pantalla station está dividida en tres secciones.
@@ -458,24 +494,24 @@ Se ha utilizado Supervisord como gestor de procesos para ejecutar en modo demoni
 \section{Apache Airflow}
 Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo. Es similar a Cron de Unix, pero permite al usuario una mayor personalización y un mayor control sobre las tareas que controla. La unidad de ejecución en Apache Airflow es el DAG (Directed Acyclic Graph). Las tareas se definen en archivos individuales y al igual que en otros sistemas se pueden definir dependencias entre tareas.
 
-Apache Airflow se ha utilizado para orquestar todas las tareas que permiten que APRSINT funcione correctamente se presenta en la \Cref{tab:airflow-sched} la lista de los DAG's que se ejecutan diariamente.
+Apache Airflow se ha utilizado para orquestar todas las tareas que permiten que APRSINT funcione correctamente se presenta en la Tabla \ref{tab:airflow-sched} la lista de los DAG's que se ejecutan diariamente.
 
 \begin{table}[htbp]
 	\centering
-	\begin{tabular}{|c|l|l|}
+	\begin{tabular}{|c|c|m{5.5cm}|}
 		\hline
-		\textbf{Hora de ejecución} & \textbf{DAG}     & \textbf{Descripción}                           \\
+		\textbf{Hora de ejecución} & \textbf{DAG} & \textbf{Descripción} \\
 		\hline
-		3:00 am                    & upload\_files    & Sube todos los archivos al S3 aprsinput        \\
+		3:00 am & upload\_files & Sube todos los archivos al S3 aprsinput \\
 		\hline
-		5:00 am                    & download\_files  & Descarga todos los archivos a la carpeta local \\
+		5:00 am & download\_files & Descarga todos los archivos a la carpeta local \\
 		\hline
-		7:00 am                    & insert\_database & Inserta todos los mensajes en la BBDD          \\
+		7:00 am  & insert\_database & Inserta todos los mensajes en la BBDD \\
 		\hline
-		9:00 am                    & cache\_data      & Precalcula en archivos los datos para la web   \\
+		9:00 am & cache\_data & Precalcula en archivos los datos para la web \\
 		\hline
 	\end{tabular}
-	\caption{Esquema de orquestaciÓn con Apache Airflow.}
+	\caption{Esquema de orquestación con Apache Airflow.}
 	\label{tab:airflow-sched}
 \end{table}
 
@@ -509,7 +545,7 @@ Se ha configurado también la redirección de puertos en el router para permitir
 
 \subsection*{Servidor Web}
 
-En esta sección se describe la arquitectura del servidor web que aloja la aplicación Dash utilizando Flask como backend, junto con Gunicorn y Nginx como reverse proxy.
+En esta sección se describen las tecnologías y la arquitectura del servidor web que aloja la aplicación web de APRSint. La aplicación utiliza el framework Flask como backend web, junto con Gunicorn como servidor web WSGI y Nginx como reverse proxy.
 
 \subsubsection*{Flask}
 
@@ -517,12 +553,15 @@ Flask es un framework web ligero para Python que proporciona herramientas para c
 
 \subsubsection*{Gunicorn}
 
-Gunicorn es un servidor HTTP WSGI (Web Server Gateway Interface) para Python. Se utiliza para servir la aplicación Flask de forma eficiente y escalable. Gunicorn gestiona múltiples procesos de forma paralela, lo que mejora el rendimiento de la aplicación. Para APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un socket UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
+Gunicorn es un servidor HTTP WSGI (Web Server Gateway Interface) para Python. Se utiliza para servir la aplicación Flask de forma eficiente y escalable. Gunicorn gestiona múltiples procesos de forma paralela, lo que mejora el rendimiento de la aplicación.
+
+Para APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un socket UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
 
 \subsubsection*{Nginx}
 
-Nginx es un servidor web de código abierto que en este caso se ha utilizado como proxy inverso. Actúa como intermediario entre los clientes y el servidor Flask/Gunicorn. Nginx se encarga de recibir las solicitudes HTTP, dirigirlas al servidor Gunicorn y devolver las respuestas a los clientes. Nginx maneja tareas como el balanceo de carga, el almacenamiento en caché la compresión de archivos y la seguridad.
+Nginx es un servidor web de código abierto que en este caso se ha utilizado como proxy inverso. Actúa como intermediario entre los clientes y el servidor Flask / Gunicorn. Nginx se encarga de recibir las solicitudes HTTP, dirigirlas al servidor Gunicorn y devolver las respuestas a los clientes. Nginx maneja tareas como el balanceo de carga, el almacenamiento en caché la compresión de archivos y la seguridad. Se ha configurado Nginx para servir la aplicación web de APRSINT en el puerto 80 (local).
 
+El diagrama de la arquitectura del servidor web se muestra en la \Cref{fig:web-server}. Como se puede observar, la solicitud HTTP del cliente pasa a través de Nginx, que actúa como un proxy inverso y la reenvía a Gunicorn, donde se ejecuta la aplicación Flask. Una vez que Flask procesa la solicitud, la respuesta se envía de vuelta al cliente a través de Nginx.
 
 \begin{figure}[h]
 	\centering
@@ -530,8 +569,6 @@ Nginx es un servidor web de código abierto que en este caso se ha utilizado com
 	\caption[Arquitectura del servidor web de APRSINT.]{Arquitectura del servidor web de APRSINT (elaboración propia).}
 	\label{fig:web-server}
 \end{figure}
-
-El diagrama de la arquitectura del servidor web se muestra en la \Cref{fig:web-server}. Como se puede observar, la solicitud HTTP del cliente pasa a través de Nginx, que actúa como un proxy inverso y la reenvía a Gunicorn, donde se ejecuta la aplicación Flask. Una vez que Flask procesa la solicitud, la respuesta se envía de vuelta al cliente a través de Nginx.
 
 \subsubsection*{Flujo de una petición HTTP}
 
@@ -548,9 +585,55 @@ A continuación se describe cómo se maneja una solicitud HTTP desde se recibe e
 	\item Nginx recibe la respuesta y la devuelve al cliente que realizó la solicitud original.
 \end{enumerate}
 
-Este proceso asegura que las solicitudes sean manejadas de manera eficiente y escalable, garantizando una experienci de navegación más fluida.
+Este proceso asegura que las solicitudes sean manejadas de manera eficiente y escalable, garantizando una experiencia de navegación más fluida.
 
 \subsection*{Protección ante ataques}
 
-Para todo el desarrollo de la aplicación se ha utilizado el protocolo ssh.
-Se han ampliado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados.
+En el desarrollo de la aplicación, se ha priorizado la seguridad como un aspecto fundamental. Se han implementado varias medidas para proteger el sistema contra posibles ataques externos e internos. A continuación, se detallan algunas de las estrategias de seguridad utilizadas:
+
+\begin{itemize}
+    \item \textbf{Uso del protocolo SSH:} Se ha optado por utilizar exclusivamente el protocolo SSH (Secure Shell) para la administración y desarrollo remoto de la Raspberry Pi. El SSH proporciona una conexión segura y cifrada, lo que reduce el riesgo de interceptación de datos sensibles durante la comunicación.
+    
+    \item \textbf{Creación de un usuario no root:} Se ha creado un usuario no root con privilegios limitados para las operaciones diarias. Esto ayuda a mitigar el impacto de posibles vulnerabilidades en el sistema, ya que el acceso de usuario se limita a las funciones esenciales.
+    
+    \item \textbf{Cambio del puerto SSH por defecto:} Como medida adicional de seguridad, se ha cambiado el puerto predeterminado del servicio SSH. Esto dificulta los intentos de acceso no autorizado, ya que los atacantes suelen escanear los puertos estándar en busca de vulnerabilidades.
+    
+    \item \textbf{Desactivación del acceso por contraseña:} Se ha desactivado el acceso por contraseña al servidor SSH, lo que significa que los usuarios deben autenticarse mediante claves SSH. Este enfoque reduce el riesgo de ataques de fuerza bruta dirigidos a contraseñas débiles.
+    
+    \item \textbf{Instalación de fail2ban:} Se ha instalado y configurado \textbf{fail2ban}, una herramienta de prevención de intrusiones que monitorea los registros del sistema en busca de intentos de acceso fallidos. Fail2ban bloquea automáticamente las direcciones IP de los atacantes después de un número especificado de intentos fallidos, lo que ayuda a proteger contra ataques de fuerza bruta.
+    
+    \item \textbf{Configuración de un firewall UFW:} Se ha configurado el firewall ``Uncomplicated Firewall'' (UFW) para controlar el tráfico de red entrante y saliente. El firewall UFW bloquea el acceso a los puertos no utilizados y permite especificar reglas de acceso para servicios específicos, lo que ayuda a prevenir intrusiones no autorizadas.
+    
+	\item \textbf{Actualización regular del sistema:} Se ha establecido un cronjob para que actualice el sistema operativo y las aplicaciones instaladas regularmente. Las actualizaciones de seguridad y los parches de software son esenciales para proteger el sistema contra vulnerabilidades conocidas.
+\end{itemize}
+
+Mediante estas estrategias, se pretende minimizar los riesgos de seguridad y proteger la integridad y la confidencialidad de los datos de la aplicación.
+
+\section{Casos de uso}
+
+En esta sección se describirán los casos de uso de la aplicación web de APRSINT, incluyendo los actores, las funcionalidades y los escenarios de uso.
+
+Se ha identificado a dos actores principales en la aplicación web de APRSINT:
+\begin{itemize}
+	\item \textbf{Investigador de OSINT:} Este actor utilizará funciones avanzadas de filtrado para analizar y extraer inteligencia de los datos APRS. El investigador de OSINT busca obtener información detallada y procesable a partir de los mensajes transmitidos, utilizando herramientas sofisticadas para explorar patrones, tendencias y relaciones en los datos.
+	\item \textbf{Radioaficionados curiosos:} Estos actores son entusiastas de la radioafición que visitarán la aplicación web de APRSINT principalmente por curiosidad y para explorar el mundo de APRS de una manera más interactiva y visual. Aunque pueden no tener experiencia en análisis avanzado de datos, están interesados en descubrir nuevas estaciones, rutas de seguimiento y eventos en tiempo real utilizando la plataforma.
+\end{itemize}
+
+Se han identificado las siguientes funcionalidades y escenarios de uso para la aplicación web de APRSINT:
+\begin{itemize}
+	\item \textbf{Visualización de estaciones APRS:} Permite a los usuarios visualizar las estaciones APRS en un mapa interactivo, proporcionando una representación geográfica del panorama APRS.
+	\item \textbf{Filtrado de estaciones APRS:} Permite a los usuarios filtrar las estaciones APRS según criterios específicos, como rango de fechas, país, contenido del mensaje, tipo de estación y SSID, para obtener información relevante.
+
+	\item \textbf{Búsqueda de mensajes:} Permite a los usuarios buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, facilitando la localización de información relevante en la red APRS.
+
+	\item \textbf{Visualización de información detallada de una estación APRS:} Permite a los usuarios acceder a información detallada de una estación APRS en particular, incluyendo datos de identificación, posiciones reportadas y mensajes emitidos, para un análisis más profundo.
+
+	\item \textbf{Visualización de un grafo de estaciones APRS:} Permite a los usuarios visualizar un grafo que representa las conexiones entre las estaciones APRS, proporcionando una visualización clara de la estructura de la red APRS.
+
+	\item \textbf{Exploración de un grafo de estaciones APRS:} Permite a los usuarios explorar el grafo de estaciones APRS interactuando con los nodos y enlaces, obteniendo información adicional sobre las relaciones entre las estaciones.
+
+	\item \textbf{Descarga de datos:} Permite a los usuarios descargar los datos de las estaciones APRS en formato CSV, facilitando su análisis fuera de la plataforma APRSINT.
+
+\end{itemize}
+
+\noindent Estas son las funcionalidades y escenarios de uso que se han diseñado para satisfacer las necesidades de los dos actores y proporcionar una experiencia completa en APRSINT.
