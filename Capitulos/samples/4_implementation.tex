@@ -20,7 +20,7 @@ Se pueden categorizar los tres módulos (\textbf{Adquisición de datos}, \textbf
 Como se ha mencionado anteriormente, uno de los objetivos de APRSINT es el de ser una solución accesible y fácil de usar. Para lograr este objetivo, se han seleccionado tecnologías ampliamente utilizadas y bien documentadas. A continuación se describen las tecnologías utilizadas en cada uno de los módulos de la aplicación.
 \subsection{Raspberry Pi}
 
-La Raspberry Pi es un \textit{Single board computer (SBC)} u ordenador de placa única desarrollada por la Fundación Raspberry Pi. Las Raspberry pi son muy populares en el mundo de la informática y la electrónica por su bajo precio, reducido tamaño y su versatilidad.
+La Raspberry Pi es un \textit{Single board computer (SBC)} u ordenador de placa única desarrollada por la Fundación Raspberry Pi. Las Raspberry Pi son muy populares en el mundo de la informática y la electrónica por su bajo precio, reducido tamaño y su versatilidad.
 
 \begin{itemize}
 	\item \textbf{Bajo precio:} La Raspberry es una opción económica para implementar desde prototipos hasta aplicaciones simples, lo que la hace muy accesible para una amplia gama de usuarios.
@@ -125,7 +125,7 @@ Apache Airflow es una plataforma de orquestación de tareas y flujos de trabajo.
 \begin{itemize}
 	\item \textbf{Orquestación de Flujos de Trabajo:} Airflow facilita la orquestación de flujos de trabajo complejos al permitir definir tareas y sus dependencias como DAG's, lo que proporciona una visión clara de la lógica de ejecución.
 	\item \textbf{Escalabilidad:} Airflow es altamente escalable y puede manejar flujos de trabajo de cualquier tamaño, desde tareas simples hasta flujos de trabajo altamente complejos.
-	\item \textbf{Monitoreo y Alertas:} Proporciona una interfaz de usuario web para monitorear el estado de los flujos de trabajo, así como capacidades de alerta para detectar y responder a fallos o retrasos en la ejecución de tareas.
+	\item \textbf{Monitorización y Alertas:} Proporciona una interfaz de usuario web para monitorear el estado de los flujos de trabajo, así como capacidades de alerta para detectar y responder a fallos o retrasos en la ejecución de tareas.
 	\item \textbf{Extensibilidad:} Airflow es altamente extensible y permite integrar fácilmente con otros sistemas y herramientas, lo que permite construir flujos de trabajo personalizados que se adapten a las necesidades específicas del proyecto.
 \end{itemize}
 
@@ -162,7 +162,7 @@ Se ha seleccionado APRS-IS como fuente de datos para la aplicación debido a su 
 
 \subsection{Recepción de paquetes APRS}
 Para la recepción de paquetes APRS se ha utilizado la librería aprslib de Python. Esta librería permite conectarse a un servidor APRS-IS y recibir los paquetes APRS en tiempo real. Se ha creado un sistema que utilizando esta librería se conecta a un servidor APRS-IS, recibe los paquetes APRS y los guarda en un buffer en memoria. Cuando el buffer se llena con aproximadamente 10.000 mensajes en aproximadamente 15 segundos, se procede a escribir el buffer en un fichero comprimido en el disco duro SSD.
-Una cosa curiosa es que los mensajes APRS no se decodifican en este punto, de hecho se guardan sin ningún tipo de procesamiento en ficheros binarios comprimidos en formato gzip para no ocupar mucho espacio en disco. Esto se hace así para evitar la sobrecarga de procesamiento en la Raspberry pi y para poder procesar los mensajes en un servidor más potente en la nube.
+Una cosa curiosa es que los mensajes APRS no se decodifican en este punto, de hecho se guardan sin ningún tipo de procesamiento en ficheros binarios comprimidos en formato gzip para no ocupar mucho espacio en disco. Esto se hace así para evitar la sobrecarga de procesamiento en la Raspberry Pi y para poder procesar los mensajes en un servidor más potente en la nube.
 
 Es importante mencionar que el sistema de recepción de paquetes APRS se ejecuta en segundo plano en modo demonio utilizando el gestor de procesos Supervisord, lo que garantiza que el sistema se mantenga en funcionamiento incluso en caso de fallos o reinicios del sistema.
 
@@ -176,11 +176,11 @@ Por defecto lambda no puede hacer uso de librerías de terceros por lo que se ha
 Para la descompresión de los ficheros se ha utilizado la librería gzip de Python, que permite leer y escribir ficheros comprimidos en formato gzip.
 Para el procesado de los mensajes APRS se ha utilizado la librería aprslib de Python como ya hemos mencionado, que permite decodificar los mensajes APRS y extraer información útil como la posición, velocidad y rumbo de los objetos rastreados en formato clave-valor.
 Esta función lambda se ejecuta de manera asíncrona y paralela, lo que permite procesar grandes volúmenes de mensajes APRS de manera eficiente y escalable. Una vez procesados los mensajes APRS, se eliminan los ficheros comprimidos del S3 de entrada (aprsinput) para liberar espacio y evitar duplicados.
-Finalmente los mensajes procesados se guardan en un Bucket S3 de salida (aprsoutput) en formato JSON para su posterior descarga. La descarga de los ficheros JSON ocurre una vez al día mediante la orquestación de Apache Airflow y la librería boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la Raspberry pi.
+Finalmente los mensajes procesados se guardan en un Bucket S3 de salida (aprsoutput) en formato JSON para su posterior descarga. La descarga de los ficheros JSON ocurre una vez al día mediante la orquestación de Apache Airflow y la librería boto3. Estos ficheros (uno por fichero de entrada) se descargan a otra carpeta temporal en la Raspberry Pi.
 
 
 \subsection{Almacenamiento de paquetes APRS en la base de datos}
-Una vez los ficheros JSON ya procesados se han descargado al directorio temporal en la Raspberry pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la librería SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros JSON, procesa los mensajes APRS y los almacena en la base de datos.
+Una vez los ficheros JSON ya procesados se han descargado al directorio temporal en la Raspberry Pi, se procede a almacenarlos en la base de datos PostgreSQL. Para ello se ha utilizado la librería SQLAlchemy de Python, que permite interactuar con bases de datos relacionales de manera sencilla y eficiente. Se ha creado un script que se ejecuta una vez al día mediante la orquestación de Apache Airflow y que lee los ficheros JSON, procesa los mensajes APRS y los almacena en la base de datos.
 Este paso esconde un gran problema que hubo de ser solucionado. El script en un principio seguía los siguientes pasos.
 
 \begin{enumerate}
@@ -395,7 +395,7 @@ Apache Airflow se ha utilizado para orquestar todas las tareas que permiten que 
 \end{table}
 
 \section{Alojamiento}
-Para alojar tanto la aplicación web como el sistema de recepción de paquetes y la base de datos de APRSINT se ha optado por utilizar una raspberry Pi 4 conectada a un internet residencial. 
+Para alojar tanto la aplicación web como el sistema de recepción de paquetes y la base de datos de APRSINT se ha optado por utilizar una Raspberry Pi 4 conectada a un internet residencial. 
 
 Para evitar los problemas que suponen las direcciones dinámicas se ha optado por utilizar el servicio de DNS dinámico de no-ip que permite asignar un nombre de dominio a una dirección IP dinámica. 
 
@@ -406,4 +406,4 @@ Insertar la solución escogida (Probablemente Nginx)
 \subsection{Protección ante ataques}
 
 Para todo el desarrollo de la aplicación se ha utilizado el protocolo ssh.
-Se han ampliado las medidas de seguridad de la raspberry pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados. 
+Se han ampliado las medidas de seguridad de la Raspberry Pi mediante la creación de un usuario no root. Se ha cambiado el puerto de ssh por defecto y se ha desactivado el acceso por contraseña. Se ha instalado \textbf{fail2ban} para protegerse de ataques de fuerza bruta y se ha instalado un firewall \textbf{UFW} para bloquear el acceso a los puertos no utilizados. 

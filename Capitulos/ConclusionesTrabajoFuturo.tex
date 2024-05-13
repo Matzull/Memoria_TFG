@@ -1,8 +1,47 @@
-\chapter{Conclusiones y Trabajo Futuro}
+\chapter{Conclusiones y trabajo futuro}
 \label{cap:conclusiones}
 
-Conclusiones del trabajo y líneas de trabajo futuro.
+\section{Conclusiones}
 
-Antes de la entrega de actas de cada convocatoria, en el plazo que se indica en el calendario de los trabajos de fin de grado, el estudiante entregará en el Campus Virtual la versión final de la memoria en PDF.
+En este trabajo se ha presentado un sistema completo centrado en la adquisición, procesamiento, análisis y visualización de datos APRS. A lo largo del proyecto, se ha seguido una metodología de trabajo dinámica y flexible que ha permitido adaptarse a los problemas encontrados durante el desarrollo.
+
+Considero que los objetivos planteados al inicio del proyecto se han cumplido con éxito. La solución propuesta se ha desarrollado siguiendo un enfoque modular y escalable, lo que permite una fácil extensión y adaptación a futuras necesidades. Además, se ha priorizado la usabilidad y la experiencia del usuario.
+
+\subsection{Éxitos del proyecto}
+
+Durante el desarrollo de este proyecto, se han alcanzado varios éxitos significativos. En primer lugar, se ha logrado implementar un sistema completo que cumple con los requisitos establecidos al inicio del proyecto. Esto incluye la adquisición eficiente de datos APRS, un procesamiento y análisis detallado y una visualización clara de la información. Además, el volumen de datos que maneja APRSINT está a la par con otras soluciones comerciales, lo que demuestra la robustez de la implementación a pesar de ser Open-Source.
+
+Además, el enfoque modular y escalable adoptado en el desarrollo de la solución ha demostrado ser efectivo, ya que a lo largo del desarrollo ha facilitado la incorporación de nuevas funcionalidades y la adaptación sencilla a los cambios que han ido ocurriendo a lo largo del proyecto. 
+
+\subsection{Desafíos superados}
+
+A pesar de los éxitos alcanzados, también se han enfrentado varios desafíos y obstáculos durante el desarrollo de este proyecto.
+
+Uno de los principales desafíos encontrados fue el intento inicial de utilizar dispositivos RTL-SDR para la adquisición de datos APRS, lo que resultó en problemas técnicos y de estabilidad\footnote{En las fechas en las que comenzó el proyecto, el \textit{Digipeater} de la zona estaba apagado y no se recibía nada de información}. Este desafío se ha superado utilizando la red APRS-IS para la adquisición de datos lo que ha resultado ser mucho más eficiente y confiable y sobre todo, mucho más versátil, ya que se pueden obtener datos de cualquier parte del mundo sin necesidad de tener un dispositivo físico en la zona de interés
+
+Otro de los desafíos que ha habido que superar ha sido el de la limitación del \textit{hardware}. Como se ha mencionado anteriormente, la Raspberry Pi utilizada no podía soportar el procesamiento masivo de datos APRS además de la carga que tenía por los otros módulos de la aplicación. Para superar esta limitación, se implementó una solución que transfiere el procesamiento al cloud de AWS. Esto ha acelerado el procesamiento y ha aligerado la carga de cómputo de la Raspberry Pi.
+
+Quizá el desafío más importante del proyecto ha sido la gestión de recursos y tiempo, ya que este ha sido un proyecto unipersonal ambicioso. La óptima gestión y planificación del tiempo han resultado ser fundamentales para superar este desafío y completar el proyecto con éxito.
+
+\subsection{Aprendizajes del proyecto}
+
+El proyecto ha sido una experiencia de aprendizaje valiosa en multitud de aspectos. En primer lugar, he adquirido una comprensión más profunda de los sistemas de comunicación de radioaficionados y de la tecnología APRS. Además he trabajado con tecnologías y herramientas nuevas para mí, como puede ser el cloud AWS o sistemas de orquestación como Apache Airflow, que me han permitido ampliar mis habilidades técnicas. Finalmente considero que el aprendizaje más importante ha sido el de la gestión de un proyecto de esta envergadura, desde la planificación inicial hasta la implementación y la entrega final.
+
+\subsection{Limitaciones del proyecto}
+
+A pesar de los éxitos y logros alcanzados, también hay algunas limitaciones en la solución propuesta. Una de las limitaciones más importantes es la dependencia de la red APRS-IS para la adquisición de datos, lo que puede limitar la cobertura y la precisión de los datos recopilados. Además, la solución actual no es capaz de manejar grandes volúmenes de datos en tiempo real, lo que puede limitar su utilidad en entornos de alta demanda. 
+
+\section{Trabajo futuro}
+
+En resumen, considero que el proyecto ha sido satisfactorio y que la solución propuesta tiene un gran potencial para mejorar la experiencia de los usuarios de APRS y enriquecer la información disponible. Para el trabajo futuro, se pueden considerar varias áreas de mejora y expansión.
+
+Una posible área de desarrollo futuro es la integración de tecnologías, como el aprendizaje automático e inteligencia artificial, para mejorar la precisión y las capacidades de análisis del sistema, facilitando la detección de patrones y otros elementos interesantes. Además, se puede explorar la posibilidad de ampliar la funcionalidad de la solución para incluir características adicionales solicitadas por los usuarios o identificadas durante el uso continuo del sistema.
+
+Además, el sistema puede ser extendido fácilmente para trabajar con otros protocolos de radio, como CATS\footnote{CATS es un proyecto con el objetivo de mejorar el sistema APRS} o LoRa, lo que ampliaría su alcance y utilidad en diferentes entornos de comunicación. También se puede mejorar la capacidad de filtrado del sistema, permitiendo a los usuarios definir y aplicar una variedad más amplia de filtros para adaptarse a sus necesidades específicas de análisis de datos.
+
+Otra área de mejora importante es la expansión de las fuentes de datos APRS utilizadas por el sistema. Actualmente, el sistema utiliza los datos provenientes de la red APRS-IS, lo que podría no capturar todos los paquetes APRS transmitidos si no llegan a un I-Gate. Para abordar esto, se pueden explorar otras fuentes de datos, como la integración con dispositivos RTL-SDR, la integración directa con estaciones de radio APRS locales o la colaboración con otros sistemas APRS existentes para mejorar la cobertura y la precisión de los datos recopilados.
+
+Finalmente, se puede considerar escalar el sistema para utilizar \textit{hardware} más capaz, lo que mejoraría su rendimiento y capacidad de procesamiento. Esto implicaría el uso de servidores más potentes o la distribución de la carga de procesamiento en múltiples nodos, lo que permitiría manejar volúmenes de datos más grandes y complejos de manera más eficiente.
+
 
 

@@ -1,5 +1,5 @@
 # exclude all files called main that dont have a .tex or pdf extension
-main.aux
+*.aux
 main.blg
 main.fdb_latexmk
 main.fls
@@ -12,3 +12,7 @@ main.lot
 *.log
 Drafts/
 *.psd
+*.bst
+*.bbl
+*.synctex.gz
+*.idx

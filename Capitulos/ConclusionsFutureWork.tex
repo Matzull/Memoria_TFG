@@ -1,7 +1,49 @@
-\chapter*{Conclusions and Future Work}
+\chapter*{Conclusions and future work}
 \label{cap:conclusions}
 \addcontentsline{toc}{chapter}{Conclusions and Future Work}
 
-Conclusions and future lines of work. This chapter contains the translation of Chapter \ref{cap:conclusiones}.
+\section{Conclusions}
+
+This work has presented a comprehensive system focused on the acquisition, processing, analysis, and visualization of APRS data. Throughout the project, a dynamic and flexible working methodology has been followed, allowing for adaptation to the challenges encountered during development.
+
+The objectives set at the beginning of the project have been successfully achieved. The proposed solution has been developed following a modular and scalable approach, enabling easy extension and adaptation to future needs. Additionally, usability and user experience have been prioritized.
+
+\subsection{Project successes}
+
+Several significant successes have been achieved during the development of this project. Firstly, a complete system fulfilling the requirements established at the project's outset has been implemented. This includes efficient acquisition of APRS data, detailed processing and analysis, and clear visualization of information. Additionally, the volume of data handled by APRSINT is on par with other commercial solutions, demonstrating the robustness of the implementation despite being Open-Source.
+
+Furthermore, the modular and scalable approach adopted in the solution's development has proven effective. Throughout development, it facilitated the incorporation of new functionalities and straightforward adaptation to changes that occurred during the project.
+
+\subsection{Challenges overcome}
+
+Despite the successes achieved, several challenges and obstacles were encountered during this project's development.
+
+One of the main challenges encountered was the initial attempt to use RTL-SDR devices for APRS data acquisition, resulting in technical and stability issues\footnote{At the beginning of the project, the Digipeater in the area was offline, and no information was received}. This challenge was overcome by using the APRS-IS network for data acquisition, which proved to be much more efficient, reliable, and versatile, allowing data to be obtained from anywhere in the world without the need for a physical device in the area of interest.
+
+Another challenge that had to be overcome was hardware limitations. As mentioned earlier, the Raspberry Pi used could not support massive APRS data processing in addition to the workload from other application modules. To overcome this limitation, a solution was implemented to offload processing to the AWS cloud. This accelerated processing and lightened the Raspberry Pi's processing load.
+
+Perhaps the most significant challenge of the project was resource and time management, as this was an ambitious solo project. Good time management and planning proved to be crucial in overcoming this challenge and successfully completing the project.
+
+\subsection{Project learnings}
+
+The project has been a valuable learning experience in many aspects. Firstly, a deeper understanding of amateur radio communication systems and APRS technology has been acquired. Additionally, working with new technologies and tools, such as AWS cloud or orchestration systems like Apache Airflow, has allowed for the expansion of technical skills. Finally, the most important learning has been project management of this magnitude, from initial planning to implementation and final delivery.
+
+\subsection{Project limitations}
+
+Despite the successes and achievements, there are also some limitations in the proposed solution. One of the most significant limitations is the dependency on the APRS-IS network for data acquisition, which may restrict the coverage and accuracy of the collected data. Additionally, the current solution is not capable of handling large volumes of real-time data, which may limit its utility in high-demand environments.
+
+\section{Future work}
+
+In summary, I consider the project a success, and the proposed solution has great potential to enhance the APRS user experience and enrich available information. For future work, several areas of improvement and expansion can be considered.
+
+One potential area for future development is the integration of technologies such as machine learning and artificial intelligence to enhance the system's accuracy and analysis capabilities, facilitating pattern detection and other interesting elements. Additionally, exploring the possibility of expanding the solution's functionality to include additional features requested by users or identified during continued system use is worthwhile.
+
+Moreover, the system can be easily extended to work with other radio protocols, such as CATS\footnote{CATS is a project aimed at improving the APRS system} or LoRa, which would broaden its scope and utility in different communication environments. Improving the system's filtering capacity, allowing users to define and apply a wider variety of filters to suit their specific data analysis needs, is also an area for enhancement.
+
+Another significant area for improvement is expanding the APRS data sources used by the system. Currently, the system relies mainly on data from the APRS-IS network, which may not capture all transmitted APRS packets if they do not reach an I-Gate. To address this, exploring other data sources, such as integration with rtl-sdr devices, direct integration with local APRS radio stations, or collaboration with other existing APRS systems to enhance data coverage and accuracy, is essential.
+
+Finally, considering scaling the system to use more capable hardware would improve its performance and processing capacity. This could involve using more powerful servers or distributing processing load across multiple nodes, allowing for more efficient handling of larger and more complex data volumes.
+
+These areas of improvement and expansion represent exciting opportunities to continue developing and enhancing the proposed solution, ensuring its relevance and usefulness in an ever-evolving technological environment.
 
 

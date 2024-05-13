@@ -1,0 +1,210 @@
+\glsdefs@newdocentry{cvs}%
+{%
+name={\acronymfont {\glsentryshort {cvs}}},%
+sort={CVS},%
+type={acronym},%
+first={CVS},%
+firstplural={CVSs},%
+text={CVS},%
+plural={CVSs},%
+description={Control Version System},%
+descriptionplural={Control Version System},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Control Version System},%
+longplural={Control Version Systems},%
+short={CVS},%
+shortplural={CVSs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{gpl}%
+{%
+name={\acronymfont {\glsentryshort {gpl}}},%
+sort={GPL},%
+type={acronym},%
+first={GPL},%
+firstplural={GPLs},%
+text={GPL},%
+plural={GPLs},%
+description={General Public License},%
+descriptionplural={General Public License},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={General Public License},%
+longplural={General Public Licenses},%
+short={GPL},%
+shortplural={GPLs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{aprs}%
+{%
+name={\acronymfont {\glsentryshort {aprs}}},%
+sort={APRS},%
+type={acronym},%
+first={APRS},%
+firstplural={APRSs},%
+text={APRS},%
+plural={APRSs},%
+description={Automatic Packet Reporting System},%
+descriptionplural={Automatic Packet Reporting System},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Automatic Packet Reporting System},%
+longplural={Automatic Packet Reporting Systems},%
+short={APRS},%
+shortplural={APRSs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{aprs-is}%
+{%
+name={\acronymfont {\glsentryshort {aprs-is}}},%
+sort={APRS-IS},%
+type={acronym},%
+first={APRS-IS},%
+firstplural={APRS-ISs},%
+text={APRS-IS},%
+plural={APRS-ISs},%
+description={Automatic Packet Reporting System Internet Service},%
+descriptionplural={Automatic Packet Reporting System Internet Service},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Automatic Packet Reporting System Internet Service},%
+longplural={Automatic Packet Reporting System Internet Services},%
+short={APRS-IS},%
+shortplural={APRS-ISs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{sbc}%
+{%
+name={\acronymfont {\glsentryshort {sbc}}},%
+sort={SBC},%
+type={acronym},%
+first={SBC},%
+firstplural={SBCs},%
+text={SBC},%
+plural={SBCs},%
+description={Single Board Computer},%
+descriptionplural={Single Board Computer},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Single Board Computer},%
+longplural={Single Board Computers},%
+short={SBC},%
+shortplural={SBCs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{rtl-sdr}%
+{%
+name={\acronymfont {\glsentryshort {rtl-sdr}}},%
+sort={RTL-SDR},%
+type={acronym},%
+first={RTL-SDR},%
+firstplural={RTL-SDRs},%
+text={RTL-SDR},%
+plural={RTL-SDRs},%
+description={Realtek Software Defined Radio},%
+descriptionplural={Realtek Software Defined Radio},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Realtek Software Defined Radio},%
+longplural={Realtek Software Defined Radios},%
+short={RTL-SDR},%
+shortplural={RTL-SDRs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{aws}%
+{%
+name={\acronymfont {\glsentryshort {aws}}},%
+sort={AWS},%
+type={acronym},%
+first={AWS},%
+firstplural={AWSs},%
+text={AWS},%
+plural={AWSs},%
+description={Amazon Web Services},%
+descriptionplural={Amazon Web Services},%
+symbol={\relax },%
+symbolplural={\relax },%
+user1={},%
+user2={},%
+user3={},%
+user4={},%
+user5={},%
+user6={},%
+long={Amazon Web Services},%
+longplural={Amazon Web Servicess},%
+short={AWS},%
+shortplural={AWSs},%
+counter={page},%
+parent={},%
+%
+}%
+
+\glsdefs@newdocentry{json}%
+{%
+name={\acronymfont {\glsentryshort {json}}},%
+sort={JSON},%
+type={acronym},%
+first={JSON},%
+firstplural={JSONs},%
+text={JSON},%
+plural={JSONs},%
+description={JavaScript Object Notation},%
+descriptionplural={JavaScript Object Notation},%
+symbol={\relax },%
+symbolplural={\relax },%
+use
