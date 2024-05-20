@@ -252,7 +252,7 @@ Una trama AX.25 consta de los siguientes campos:
 
 \subsubsection*{Contenido de la Trama}
 
-Dentro del campo de información de una trama AX.25, se pueden incluir diversos datos relevantes para APRS. Esto puede incluir información de posición (latitud y longitud), velocidad, altitud, rumbo, comentarios del operador, mensajes de texto, etc ... \cite{APRSPaths}.
+Dentro del campo de información de una trama AX.25, se pueden incluir diversos datos relevantes para APRS. Esto puede incluir información de posición (latitud y longitud), velocidad, altitud, rumbo, comentarios del operador, mensajes de texto, etc \ldots \cite{APRSPaths}\cite{APRS}.
 
 \[\underbrace{\textbf{\textcolor{red}{NOCALL}}}_{Origen}>\underbrace{\textbf{\textcolor[HTML]{FA9F42}{APRS}}}_{Destino}, \underbrace{\textbf{\textcolor{blue}{OH7RDA,OH7RDB}}}_{Digipeaters\ y\ I-Gates}:\underbrace{\textbf{\textcolor{green}{!4903N07201W-test A=001234}}}_{Campo\ datos}\]
 
@@ -421,7 +421,7 @@ Finalmente se ha optado por el uso de PostgreSQL FTS (Full Text Search). Postgre
 	\item \textbf{Indexación:} PostgreSQL FTS indexa automáticamente los mensajes de texto, lo que permite realizar búsquedas de texto de manera eficiente incluso en grandes volúmenes de datos.
 \end{itemize}
 
-Se ha creado un índice de texto completo en la columna de mensajes de la tabla de mensajes y se ha utilizado la función to\textunderscore tsvector para convertir los mensajes en un vector de texto completo. Posteriormente se ha utilizado la función plainto\textunderscore tsquery para convertir la palabra o frase de búsqueda en una consulta de texto completo y finalmente se ha utilizado la función ts\textunderscore query para realizar la búsqueda de texto completo en la columna de mensajes. Este filtro permite al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, lo que facilita la identificación y el análisis de los mensajes relevantes.
+Se ha creado un índice de texto completo en la columna de mensajes de la tabla de mensajes y se ha utilizado la función to\textunderscore tsvector para convertir los mensajes en un vector de texto completo. Posteriormente se ha utilizado la función plainto\textunderscore tsquery para convertir la palabra o frase de búsqueda en una consulta de texto completo y finalmente se ha utilizado la función ts\textunderscore query para realizar la búsqueda de texto completo en la columna de mensajes. Este filtro permite al usuario buscar mensajes emitidos por las estaciones que contengan una palabra o frase específica, lo que facilita la identificación y el análisis de los mensajes relevantes \cite{PostgreSQLFTS}.
 
 Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal con la lista de todos los mensajes que contienen la palabra o frase de búsqueda, ordenados por relevancia haciendo uso de la función ts\textunderscore rank. Otra funcionalidad interesante es que la palabra o palabras buscadas se resaltan en el mensaje para facilitar su identificación como se muestra en la \Cref{fig:postgres-fts}.
 
@@ -569,11 +569,11 @@ Se ha configurado también la redirección de puertos en el router para permitir
 
 \subsection{Servidor Web}
 
-En esta sección se describen las tecnologías y la arquitectura del servidor web que aloja la aplicación web de APRSINT. La aplicación utiliza el \textit{framework} Flask como backend web, junto con Gunicorn como servidor web WSGI y Nginx como reverse proxy.
+En esta sección se describen las tecnologías y la arquitectura del servidor web que aloja la aplicación web de APRSINT \cite{WebServer}. La aplicación utiliza el \textit{framework} Flask como \textit{backend} web, junto con Gunicorn como servidor web WSGI y Nginx como reverse proxy.
 
 \subsubsection*{Flask}
 
-Flask es un \textit{framework} web ligero para Python que proporciona herramientas para crear aplicaciones web de forma rápida y sencilla. En esta aplicación, Flask se utiliza como el \textit{framework} backend para la aplicación de Dash. Proporciona las rutas y la lógica de negocio necesarias para la aplicación.
+Flask es un \textit{framework} web ligero para Python que proporciona herramientas para crear aplicaciones web de forma rápida y sencilla. En esta aplicación, Flask se utiliza como el \textit{framework} \textit{backend} para la aplicación de Dash. Proporciona las rutas y la lógica de negocio necesarias para la aplicación.
 
 \subsubsection*{Gunicorn}
 
@@ -613,7 +613,7 @@ Este proceso asegura que las solicitudes sean manejadas de manera eficiente y es
 
 \subsection{Protección ante ataques}
 
-En el desarrollo de la aplicación, se ha priorizado la seguridad como un aspecto fundamental. Se han implementado varias medidas para proteger el sistema contra posibles ataques externos e internos. A continuación, se detallan algunas de las estrategias de seguridad utilizadas:
+En el desarrollo de la aplicación, se ha priorizado la seguridad como un aspecto fundamental. Se han implementado varias medidas \cite{RpiSecure} para proteger el sistema contra posibles ataques externos e internos. A continuación, se detallan algunas de las estrategias de seguridad utilizadas:
 
 \begin{itemize}
     \item \textbf{Uso del protocolo SSH:} Se ha optado por utilizar exclusivamente el protocolo SSH (Secure Shell) para la administración y desarrollo remoto de la Raspberry Pi. El SSH proporciona una conexión segura y cifrada, lo que reduce el riesgo de interceptación de datos sensibles durante la comunicación.
