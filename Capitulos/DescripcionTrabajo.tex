@@ -436,10 +436,11 @@ Cuando un usuario realiza una búsqueda de texto completo, se muestra un modal c
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.5\textwidth]{Imagenes/Chapter_4/fts_output.png}
+	\includegraphics[width=0.4\textwidth]{Imagenes/Chapter_4/fts_output.png}
 	\caption[Resultados de la búsqueda de <<emergency hospital>>.]{Resultados de la búsqueda de <<emergency hospital>> (elaboración propia).}
 	\label{fig:postgres-fts}
 \end{figure}
+\FloatBarrier
 
 \noindent En el modal se muestra una tabla de dos columnas, la columna izquierda contiene un botón con el nombre de la estación y la columna derecha el contenido del mensaje.
 
@@ -482,7 +483,9 @@ Finalmente encontramos la sección de mensajes. En esta sección se muestra una 
 La tabla es interactiva y permite al usuario filtrar los mensajes por el intervalo de fechas que pretenda.
 
 \subsection{Graph - Tercera pantalla}
-Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en el que los nodos son las estaciones y las aristas dirigidas, mensajes como se muestra en la \Cref{fig:graph}. El grafo es interactivo y permite hacer zoom, desplazarse y al posicionar el cursor encima de un nodo o arista aparecerá un recuadro ofreciendo información adicional. El color y tamaño de los nodos depende de la cantidad de mensajes que ha emitido o recibido la estación y de misma manera el color y tamaño de las aristas depende de la cantidad de mensajes que se han emitido o recibido desde la estación origen y destino.
+Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en el que los nodos son las estaciones y las aristas dirigidas, mensajes como se muestra en la \Cref{fig:graph}. 
+
+El grafo es interactivo y permite hacer zoom, desplazarse y al posicionar el cursor encima de un nodo o arista aparecerá un recuadro ofreciendo información adicional. El color y tamaño de los nodos depende de la cantidad de mensajes que ha emitido o recibido la estación y de misma manera el color y tamaño de las aristas depende de la cantidad de mensajes que se han emitido o recibido desde la estación origen y destino.
 
 \begin{figure}[h]
 	\centering
@@ -490,7 +493,6 @@ Esta pantalla es la última de la web, en ella se muestra un grafo dirigido en e
 	\caption[Grafo de estaciones APRS.]{Grafo de estaciones APRS (elaboración propia).}
 	\label{fig:graph}
 \end{figure}
-
 Las características que se buscaban en la solución final eran:
 
 \begin{itemize}
@@ -588,7 +590,7 @@ Flask es un \textit{framework} web ligero para Python que proporciona herramient
 
 Gunicorn es un servidor HTTP WSGI (\textit{Web Server Gateway Interface}) para Python. Se utiliza para servir la aplicación Flask de forma eficiente y escalable. Gunicorn gestiona múltiples procesos de forma paralela, lo que mejora el rendimiento de la aplicación.
 
-Para APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un \textit{socket} UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
+En APRSINT se ha configurado Gunicorn para ejecutar la aplicación Flask en modo demonio y con 4 procesos de trabajo. Gunicorn crea un \textit{socket} UNIX en el que escucha las solicitudes HTTP y las reenvía a la aplicación Flask para su procesamiento.
 
 \subsubsection*{Nginx}
 
